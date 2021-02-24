@@ -1,5 +1,7 @@
 package com.powapp.powason.ui.main
 
-class MainViewModel {
+import androidx.lifecycle.ViewModel
 
+class MainViewModel : ViewModel() {
+    //TODO: do this
 }
