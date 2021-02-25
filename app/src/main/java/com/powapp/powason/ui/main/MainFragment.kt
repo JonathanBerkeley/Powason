@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.powapp.powason.data.Login
 import com.powapp.powason.databinding.MainFragmentBinding
+import com.powapp.powason.util.DBG
 
 class MainFragment : Fragment() {
 
@@ -23,7 +24,7 @@ class MainFragment : Fragment() {
         binding = MainFragmentBinding.inflate(inflater, container, false)
 
         val login = Login("My google password", "Google", "https://google.ie", "abcdefg", "Jonathan")
-        Log.i("dataLogging", login.toString())
+        Log.i(DBG, login.toString())
         return binding.root
     }
 
