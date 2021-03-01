@@ -1,9 +1,11 @@
 package com.powapp.powason.data
 
+import com.squareup.moshi.Json
+
 data class Login (
-        val title: String,
-        val target: String,
-        val target_url: String,
-        val password: String,
-        val username: String
+        @Json(name = "title") val  title: String,
+        @Json(name = "target") val target: String,
+        @Json(name = "target_url") val target_url: String,
+        @Json(name = "password") val password: String,
+        @Json(name = "username") val username: String
 )
