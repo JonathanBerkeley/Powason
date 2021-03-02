@@ -6,8 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.powapp.powason.data.Login
 import com.powapp.powason.databinding.MainFragmentBinding
 import com.powapp.powason.util.DBG
 
@@ -20,19 +20,18 @@ class MainFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = MainFragmentBinding.inflate(inflater, container, false)
 
-        val login = Login("My google password", "Google", "https://google.ie", "abcdefg", "Jonathan")
-        Log.i(DBG, login.toString())
-        return binding.root
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-
-
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
-        //TODO: use the view model
+        viewModel.loginData.observe(viewLifecycleOwner, Observer {
+            val loginUrls = StringBuilder()
+            for (login in it) {
+                Log.i(DBG, "${login.target} (${login.target_url})")
+                loginUrls.append(login.target_url + "\n")
+            }
+            binding.textView.text = loginUrls
+        })
+        return binding.root
     }
 }
