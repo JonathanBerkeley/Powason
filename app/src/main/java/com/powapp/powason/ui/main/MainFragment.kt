@@ -21,6 +21,7 @@ class MainFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        requireActivity().title = "Accounts"
         binding = MainFragmentBinding.inflate(inflater, container, false)
 
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
