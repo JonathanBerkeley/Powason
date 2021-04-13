@@ -1,7 +1,9 @@
 package com.powapp.powason.data
 
 import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
+@JsonClass(generateAdapter = true)
 data class Login (
         @Json(name = "title") val  title: String,
         @Json(name = "target") val target: String,

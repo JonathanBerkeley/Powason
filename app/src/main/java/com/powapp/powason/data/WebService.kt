@@ -4,6 +4,6 @@ import retrofit2.Response
 import retrofit2.http.GET
 
 interface WebService {
-    @GET("/file.json")
+    @GET("/brute")
     suspend fun getLoginData(): Response<List<Login>>
 }
