@@ -1,5 +1,6 @@
 package com.powapp.powa
 
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.*
@@ -12,6 +13,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.powapp.powa.databinding.LandingFragmentBinding
+import com.powapp.powa.util.APP_VERSION
 import com.powapp.powa.util.DEV_MODE
 import com.powapp.powa.util.NEW_ENTRY_ID
 
@@ -21,7 +23,7 @@ class LandingFragment : Fragment(),
     private lateinit var viewModel: LandingViewModel
     private lateinit var binding: LandingFragmentBinding
     private lateinit var adapter: LoginListAdapter
-
+    
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -32,6 +34,7 @@ class LandingFragment : Fragment(),
             .supportActionBar?.setDisplayHomeAsUpEnabled(false)
 
         requireActivity().title = "Accounts"
+        Log.i("App init, version: ", APP_VERSION)
 
         //Enables the options menu for this fragment
         setHasOptionsMenu(true)

@@ -28,7 +28,7 @@ class ViewLoginViewModel(app: Application) : AndroidViewModel(app) {
                     else
                         DataEntity()
                 //Posts data from background thread
-                currentLoginData.postValue(login)
+                currentLoginData.postValue(login!!)
             }
         }
     }
@@ -38,7 +38,7 @@ class ViewLoginViewModel(app: Application) : AndroidViewModel(app) {
             withContext(Dispatchers.IO) {
                 val site = database?.loginDao()?.getSavedSite(loginId)
                 //Posts the data from this background thread
-                savedSite.postValue(site)
+                savedSite.postValue(site!!)
             }
         }
     }

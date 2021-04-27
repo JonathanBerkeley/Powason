@@ -10,3 +10,6 @@ const val WEB_SERVICE_URL = "http://10.0.2.2:8080/"
 //Persistence keys
 const val EDIT_TEXT_KEY = "editTextKey"
 const val CURSOR_POSITION_KEY = "cursorPositionKey"
+
+//Versioning
+const val APP_VERSION = "0.0.4"
