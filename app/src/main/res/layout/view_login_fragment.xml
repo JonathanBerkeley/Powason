@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ViewLoginFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#FFFFFF">
+
+        <pl.droidsonroids.gif.GifImageView
+            android:id="@+id/loginFaviconView"
+            android:layout_width="32dp"
+            android:layout_height="37dp"
+            android:layout_marginTop="50dp"
+            android:contentDescription="@string/website_favicon"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@android:drawable/btn_star" />
+
+        <EditText
+            android:id="@+id/editTitleText"
+            android:layout_width="250dp"
+            android:layout_height="50dp"
+            android:layout_margin="16dp"
+            android:hint="@string/enter_title_here"
+            android:inputType="textCapSentences"
+            android:text=""
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/loginFaviconView"
+            tools:ignore="Autofill"
+            tools:text="@string/enter_title_here" />
+
+        <EditText
+            android:id="@+id/editEmailText"
+            android:layout_width="250dp"
+            android:layout_height="50dp"
+            android:layout_margin="16dp"
+            android:hint="@string/enter_email_address_username"
+            android:inputType="textVisiblePassword|textNoSuggestions"
+            android:text=""
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/editTitleText"
+            tools:ignore="Autofill,TextFields"
+            tools:text="@string/enter_email_address_username" />
+
+        <EditText
+            android:id="@+id/editPasswordText"
+            android:layout_width="250dp"
+            android:layout_height="50dp"
+            android:layout_margin="16dp"
+            android:hint="@string/enter_password"
+            android:inputType="textPassword|textNoSuggestions"
+            android:text=""
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/editEmailText"
+            tools:ignore="Autofill"
+            tools:text="@string/enter_password" />
+
+
+        <EditText
+            android:id="@+id/editTargetNameText"
+            android:layout_width="250dp"
+            android:layout_height="50dp"
+            android:layout_margin="16dp"
+            android:layout_marginTop="-10dp"
+            android:hint="@string/enter_website_url_required"
+            android:inputType="textWebEmailAddress"
+            android:text=""
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/generatePassword"
+            tools:ignore="Autofill"
+            tools:text="@string/enter_website_url_required" />
+
+        <EditText
+            android:id="@+id/editTargetText"
+            android:layout_width="250dp"
+            android:layout_height="50dp"
+            android:layout_margin="16dp"
+            android:hint="@string/note"
+            android:inputType="textCapSentences|textMultiLine"
+            android:text=""
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/editTargetNameText"
+            tools:ignore="Autofill"
+            tools:text="@string/note" />
+
+        <Button
+            android:id="@+id/submitButton"
+            android:layout_width="200dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="20dp"
+            android:text="@string/submit"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/editTargetText" />
+
+        <ToggleButton
+            android:id="@+id/toggleButton"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:background="#00FFFFFF"
+            android:textOff="@null"
+            android:textOn="@null"
+            android:textSize="0sp"
+            app:layout_constraintBottom_toBottomOf="@+id/editPasswordText"
+            app:layout_constraintEnd_toEndOf="@+id/editPasswordText"
+            app:layout_constraintTop_toTopOf="@+id/editPasswordText"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <TextView
+            android:id="@+id/generatePassword"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:linksClickable="true"
+            android:text="@string/generate_password"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:textColor="#F553A5A9"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toTopOf="@+id/editTargetNameText"
+            app:layout_constraintEnd_toEndOf="@+id/editPasswordText"
+            app:layout_constraintTop_toBottomOf="@+id/editPasswordText" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>

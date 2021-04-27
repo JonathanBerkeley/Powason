@@ -1,0 +1,5 @@
+password.svg - Gregor Cresnar (https://www.flaticon.com/authors/gregor-cresnar)
+
+lock.svg - Those Icons (https://www.flaticon.com/authors/those-icons)
+
+pngs made in photoshop from these svgs

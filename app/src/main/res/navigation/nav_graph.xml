@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/landingFragment">
+
+    <fragment
+        android:id="@+id/landingFragment"
+        android:name="com.powapp.powa.LandingFragment"
+        android:label="landing_fragment"
+        tools:layout="@layout/landing_fragment" >
+        <action
+            android:id="@+id/action_edit_login"
+            app:destination="@id/viewLoginFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/viewLoginFragment"
+        android:name="com.powapp.powa.ViewLoginFragment"
+        android:label="view_login_fragment"
+        tools:layout="@layout/view_login_fragment" >
+        <argument
+            android:name="loginId"
+            app:argType="integer"
+            android:defaultValue="0" />
+    </fragment>
+</navigation>

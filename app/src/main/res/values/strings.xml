@@ -1,3 +1,16 @@
 <resources>
     <string name="app_name">Powason</string>
+    <string name="website_favicon">Website favicon</string>
+    <string name="add_sample_data">Add sample data</string>
+    <string name="delete_all_listings">Delete all listings</string>
+    <string name="add_login_entry">Add login entry</string>
+    <string name="enter_title_here">Title <font color='#f5767a'>*</font></string>
+    <string name="submit">Submit</string>
+    <string name="enter_email_address_username">Email or Username</string>
+    <string name="enter_password">Password</string>
+    <string name="enter_website_url_required">Website Address <font color='#f5767a'>*</font></string>
+    <string name="note">Note…</string>
+    <string name="delete_this_account">Delete this account</string>
+    <string name="generate_password">Generate Password</string>
+    <string name="generate_new_password">Generate new password</string>
 </resources>
