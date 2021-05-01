@@ -13,6 +13,3 @@ const val CURSOR_POSITION_KEY = "cursorPositionKey"
 
 //Versioning
 const val APP_VERSION = "0.0.6"
-
-//Secret api key for https://haveibeenpwned.com/
-const val HIBP_API_KEY = "mysecretapikey"
