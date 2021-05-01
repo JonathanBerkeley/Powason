@@ -1,11 +1,11 @@
-package com.powapp.powa
+package com.powapp.powason
 
 import androidx.room.Room
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.powapp.powa.data.InternalDatabase
-import com.powapp.powa.data.LoginDao
-import com.powapp.powa.data.SampleDataProvider
+import com.powapp.powason.data.InternalDatabase
+import com.powapp.powason.data.LoginDao
+import com.powapp.powason.data.SampleDataProvider
 import org.junit.After
 
 import org.junit.Test

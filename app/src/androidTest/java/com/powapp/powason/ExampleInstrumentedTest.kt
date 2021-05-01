@@ -1,4 +1,4 @@
-package com.powapp.powa
+package com.powapp.powason
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -19,6 +19,6 @@ class ExampleInstrumentedTest {
     fun useAppContext() {
         // Context of the app under test.
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-        assertEquals("com.powapp.powa", appContext.packageName)
+        assertEquals("com.powapp.com.powapp.powason", appContext.packageName)
     }
 }

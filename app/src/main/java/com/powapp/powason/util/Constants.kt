@@ -1,4 +1,4 @@
-package com.powapp.powa.util
+package com.powapp.powason.util
 
 const val NEW_ENTRY_ID = 0
 const val DEV_MODE = true
@@ -12,4 +12,7 @@ const val EDIT_TEXT_KEY = "editTextKey"
 const val CURSOR_POSITION_KEY = "cursorPositionKey"
 
 //Versioning
-const val APP_VERSION = "0.0.4"
+const val APP_VERSION = "0.0.6"
+
+//Secret api key for https://haveibeenpwned.com/
+const val HIBP_API_KEY = "mysecretapikey"

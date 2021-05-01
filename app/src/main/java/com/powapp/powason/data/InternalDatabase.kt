@@ -1,4 +1,4 @@
-package com.powapp.powa.data
+package com.powapp.powason.data
 
 import android.content.Context
 import androidx.room.*

@@ -1,8 +1,8 @@
-package com.powapp.powa.data
+package com.powapp.powason.data
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.powapp.powa.util.NEW_ENTRY_ID
+import com.powapp.powason.util.NEW_ENTRY_ID
 import java.util.*
 
 @Entity(tableName = "logins")

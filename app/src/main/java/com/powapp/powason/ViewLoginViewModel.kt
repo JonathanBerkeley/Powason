@@ -1,12 +1,12 @@
-package com.powapp.powa
+package com.powapp.powason
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.powapp.powa.data.DataEntity
-import com.powapp.powa.data.InternalDatabase
-import com.powapp.powa.util.NEW_ENTRY_ID
+import com.powapp.powason.data.DataEntity
+import com.powapp.powason.data.InternalDatabase
+import com.powapp.powason.util.NEW_ENTRY_ID
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext

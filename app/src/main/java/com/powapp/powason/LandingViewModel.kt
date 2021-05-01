@@ -1,21 +1,16 @@
-package com.powapp.powa
+package com.powapp.powason
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.powapp.powa.data.DataEntity
-import com.powapp.powa.data.InternalDatabase
-import com.powapp.powa.data.SampleDataProvider
+import com.powapp.powason.data.InternalDatabase
+import com.powapp.powason.data.SampleDataProvider
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 
 class LandingViewModel(app: Application) : AndroidViewModel(app) {
-
-
     //Creates database instance (if it doesn't currently exist) with the current application context
     private val database = InternalDatabase.getInstance(app)
 

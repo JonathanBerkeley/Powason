@@ -10,7 +10,7 @@ android {
     buildToolsVersion "30.0.3"
 
     defaultConfig {
-        applicationId "com.powapp.powa"
+        applicationId "com.powapp.com.powapp.powason"
         minSdkVersion 19
         targetSdkVersion 30
         versionCode 1

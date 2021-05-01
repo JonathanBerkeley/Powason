@@ -1,4 +1,4 @@
-package com.powapp.powa
+package com.powapp.powason
 
 import org.junit.Test
 

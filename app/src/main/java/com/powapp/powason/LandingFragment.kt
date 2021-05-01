@@ -1,6 +1,5 @@
-package com.powapp.powa
+package com.powapp.powason
 
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.*
@@ -12,10 +11,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.powapp.powa.databinding.LandingFragmentBinding
-import com.powapp.powa.util.APP_VERSION
-import com.powapp.powa.util.DEV_MODE
-import com.powapp.powa.util.NEW_ENTRY_ID
+import com.powapp.powason.databinding.LandingFragmentBinding
+import com.powapp.powason.util.APP_VERSION
+import com.powapp.powason.util.DEV_MODE
+import com.powapp.powason.util.NEW_ENTRY_ID
 
 class LandingFragment : Fragment(),
     LoginListAdapter.ListItemListener {

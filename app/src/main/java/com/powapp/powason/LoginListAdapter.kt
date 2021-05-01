@@ -1,4 +1,4 @@
-package com.powapp.powa
+package com.powapp.powason
 
 import android.util.Log
 import android.view.LayoutInflater
@@ -7,8 +7,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.powapp.powa.data.DataEntity
-import com.powapp.powa.databinding.ListItemBinding
+import com.powapp.powason.data.DataEntity
+import com.powapp.powason.databinding.ListItemBinding
 import java.lang.Exception
 
 class LoginListAdapter(

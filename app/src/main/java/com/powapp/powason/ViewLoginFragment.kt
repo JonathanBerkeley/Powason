@@ -1,4 +1,4 @@
-package com.powapp.powa
+package com.powapp.powason
 
 import android.app.Activity
 import androidx.lifecycle.ViewModelProvider
@@ -15,9 +15,9 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.powapp.powa.databinding.ViewLoginFragmentBinding
-import com.powapp.powa.util.CURSOR_POSITION_KEY
-import com.powapp.powa.util.EDIT_TEXT_KEY
+import com.powapp.powason.databinding.ViewLoginFragmentBinding
+import com.powapp.powason.util.CURSOR_POSITION_KEY
+import com.powapp.powason.util.EDIT_TEXT_KEY
 import java.security.SecureRandom
 import java.util.*
 
