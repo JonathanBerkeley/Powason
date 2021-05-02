@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.powapp.powason.LoginListAdapter
 import com.powapp.powason.R
+import com.powapp.powason.data.AccountData
 import com.powapp.powason.databinding.LandingFragmentBinding
 import com.powapp.powason.util.*
 
@@ -74,6 +75,7 @@ class LandingFragment : Fragment(),
                 Log.i(HIBP, breach.Name)
                 breachNames.append(breach.Name + "\n")
             }
+            Log.i(HIBP, "Breaches: " + it.breach.count())
         })
 
         viewModel.loginList?.observe(viewLifecycleOwner, Observer {
