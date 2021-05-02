@@ -1,4 +1,4 @@
-package com.powapp.powason
+package com.powapp.powason.ui.main
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
@@ -33,6 +33,14 @@ class LandingViewModel(app: Application) : AndroidViewModel(app) {
                 //Delete all entries in the database and reset the primary key
                 database?.loginDao()?.emptyDatabase()
                 database?.loginDao()?.resetDatabasePK()
+            }
+        }
+    }
+
+    fun checkAccountSecurity() {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+
             }
         }
     }

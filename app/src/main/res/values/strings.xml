@@ -13,4 +13,5 @@
     <string name="delete_this_account">Delete this account</string>
     <string name="generate_password">Generate Password</string>
     <string name="generate_new_password">Generate new password</string>
+    <string name="check_for_breaches">Check for breaches</string>
 </resources>

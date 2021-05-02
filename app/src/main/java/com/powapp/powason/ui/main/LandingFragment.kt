@@ -1,4 +1,4 @@
-package com.powapp.powason
+package com.powapp.powason.ui.main
 
 import android.os.Bundle
 import android.util.Log
@@ -11,6 +11,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.powapp.powason.LoginListAdapter
+import com.powapp.powason.R
 import com.powapp.powason.databinding.LandingFragmentBinding
 import com.powapp.powason.util.APP_VERSION
 import com.powapp.powason.util.DEV_MODE
@@ -26,7 +28,7 @@ class LandingFragment : Fragment(),
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
         //Disables back navigation on main screen
         (activity as AppCompatActivity)
@@ -78,6 +80,7 @@ class LandingFragment : Fragment(),
         return when (item.itemId) {
             R.id.action_sample_data -> addSampleData()
             R.id.action_delete_all -> deleteAllListings()
+            R.id.action_check_security -> checkAccountSecurity()
             else -> return super.onOptionsItemSelected(item)
         }
     }
@@ -99,6 +102,11 @@ class LandingFragment : Fragment(),
         }
         alertDialogBuilder.setNegativeButton("No", null)
         alertDialogBuilder.show()
+        return true
+    }
+
+    private fun checkAccountSecurity(): Boolean {
+        viewModel.checkAccountSecurity()
         return true
     }
 

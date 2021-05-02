@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/landingFragment"
-        android:name="com.powapp.powason.LandingFragment"
+        android:name="com.powapp.powason.ui.main.LandingFragment"
         android:label="landing_fragment"
         tools:layout="@layout/landing_fragment" >
         <action
