@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.powapp.powason.data.InternalDatabase
+import com.powapp.powason.data.LoginDataRepository
 import com.powapp.powason.data.SampleDataProvider
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -16,6 +17,10 @@ class LandingViewModel(app: Application) : AndroidViewModel(app) {
 
     //Fetches live data from the database
     val loginList = database?.loginDao()?.getAll()
+
+    private val dataRepository = LoginDataRepository(app)
+    val loginData = dataRepository.loginData
+    val breachData = dataRepository.breachData
 
     fun addSampleData() {
         //Start a coroutine

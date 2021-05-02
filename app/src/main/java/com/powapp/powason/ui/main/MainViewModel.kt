@@ -14,5 +14,5 @@ import com.squareup.moshi.Types
 class MainViewModel(app: Application) : AndroidViewModel(app) {
     private val dataRepository = LoginDataRepository(app)
     val loginData = dataRepository.loginData
-
+    val breachData = dataRepository.breachData
 }

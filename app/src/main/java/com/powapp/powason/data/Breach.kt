@@ -5,5 +5,5 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 data class Breach (
-    @Json(name = "breach_site") val breachSite: String
+    @Json(name = "Name") val Name: String
 )

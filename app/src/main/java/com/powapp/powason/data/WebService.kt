@@ -8,8 +8,4 @@ import retrofit2.http.Headers
 interface WebService {
     @GET("/brute")
     suspend fun getLoginData(): Response<List<Login>>
-
-    @Headers("hibp-api-key$HIBP_API_KEY")
-    @GET("/breachedaccount/test@gmail.com")
-    suspend fun getBreachData(): Response<List<Breach>>
 }

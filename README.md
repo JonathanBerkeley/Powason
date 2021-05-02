@@ -8,3 +8,6 @@ Development repo - no stable versions
 
 # 0.0.4
 Development version without API usage
+
+# 0.0.8
+Rehooked API into application

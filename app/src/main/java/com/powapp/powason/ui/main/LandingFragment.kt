@@ -15,6 +15,7 @@ import com.powapp.powason.LoginListAdapter
 import com.powapp.powason.R
 import com.powapp.powason.databinding.LandingFragmentBinding
 import com.powapp.powason.util.APP_VERSION
+import com.powapp.powason.util.DBG
 import com.powapp.powason.util.DEV_MODE
 import com.powapp.powason.util.NEW_ENTRY_ID
 
@@ -51,6 +52,21 @@ class LandingFragment : Fragment(),
             )
             addItemDecoration(divider)
         }
+
+        viewModel.loginData.observe(viewLifecycleOwner, Observer {
+            val loginUrls = StringBuilder()
+            for (login in it) {
+                Log.i(DBG, "${login.target} (${login.target_url})")
+                loginUrls.append(login.target_url + "\n")
+            }
+        })
+
+        viewModel.breachData.observe(viewLifecycleOwner, Observer {
+            val breachBody = StringBuilder()
+            for (breach in it) {
+                Log.i("HIBP", breach.Name + " :D")
+            }
+        })
 
         viewModel.loginList?.observe(viewLifecycleOwner, Observer {
             Log.i("dataLogging!", it.toString())

@@ -19,10 +19,12 @@ import kotlinx.coroutines.launch
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
+import java.net.SocketTimeoutException
 
 class LoginDataRepository(val app: Application) {
 
     val loginData = MutableLiveData<List<Login>>()
+    val breachData = MutableLiveData<List<Breach>>()
 
     /*
     private val listType = Types.newParameterizedType(
@@ -33,6 +35,7 @@ class LoginDataRepository(val app: Application) {
     init {
         CoroutineScope(Dispatchers.IO).launch {
             callWebService()
+            callHIBPWebService()
         }
         Log.i(DBG, "Network availability: ${networkAvailable()}")
     }
@@ -53,14 +56,18 @@ class LoginDataRepository(val app: Application) {
     @WorkerThread
     suspend fun callHIBPWebService() {
         if (networkAvailable()) {
-            val retrofit = Retrofit.Builder()
-                .baseUrl(WEB_HIBP_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
-            val service = retrofit.create(WebService::class.java)
-            val serviceData = service.getBreachData().body() ?: emptyList()
-
-            Log.i(DBG, serviceData.toString())
+            try {
+                val retrofit = Retrofit.Builder()
+                    .baseUrl(WEB_HIBP_URL)
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build()
+                val service = retrofit.create(HIBPService::class.java)
+                val serviceData = service.getBreachData().body() ?: emptyList()
+                breachData.postValue(serviceData)
+            }
+            catch (e: SocketTimeoutException) {
+                Log.i(DBG, "Couldn't connect to remote web service")
+            }
         }
     }
 

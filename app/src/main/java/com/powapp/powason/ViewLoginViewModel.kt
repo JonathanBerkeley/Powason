@@ -1,5 +1,6 @@
 package com.powapp.powason
 
+import android.annotation.SuppressLint
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
@@ -17,6 +18,7 @@ class ViewLoginViewModel(app: Application) : AndroidViewModel(app) {
     val savedSite = MutableLiveData<String>()
 
     //Injects the login to the form from the database by the ID
+    @SuppressLint("NullSafeMutableLiveData")
     fun injectLoginById(loginId: Int) {
         //Run as coroutine (background thread)
         viewModelScope.launch {
@@ -28,17 +30,18 @@ class ViewLoginViewModel(app: Application) : AndroidViewModel(app) {
                     else
                         DataEntity()
                 //Posts data from background thread
-                currentLoginData.postValue(login!!)
+                currentLoginData.postValue(login)
             }
         }
     }
 
+    @SuppressLint("NullSafeMutableLiveData")
     fun getLastSavedSite(loginId: Int) {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 val site = database?.loginDao()?.getSavedSite(loginId)
                 //Posts the data from this background thread
-                savedSite.postValue(site!!)
+                savedSite.postValue(site)
             }
         }
     }
