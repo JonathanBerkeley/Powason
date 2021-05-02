@@ -8,22 +8,27 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavController
+import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.powapp.powason.LoginListAdapter
 import com.powapp.powason.R
-import com.powapp.powason.data.AccountData
 import com.powapp.powason.databinding.LandingFragmentBinding
+import com.powapp.powason.ui.shared.SharedViewModel
 import com.powapp.powason.util.*
 
 class LandingFragment : Fragment(),
     LoginListAdapter.ListItemListener {
 
-    private lateinit var viewModel: LandingViewModel
+    private lateinit var viewModel: SharedViewModel
     private lateinit var binding: LandingFragmentBinding
     private lateinit var adapter: LoginListAdapter
-    
+    private lateinit var swipeLayout: SwipeRefreshLayout
+    private lateinit var navController: NavController
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -41,7 +46,14 @@ class LandingFragment : Fragment(),
 
         //Inflates the fragment and returns reference to binding variable
         binding = LandingFragmentBinding.inflate(inflater, container, false)
-        viewModel = ViewModelProvider(this).get(LandingViewModel::class.java)
+        navController = Navigation.findNavController(
+            requireActivity(), R.id.nav_host
+        )
+        viewModel = ViewModelProvider(requireActivity()).get(SharedViewModel::class.java)
+        swipeLayout = binding.swipeLayout
+        swipeLayout.setOnRefreshListener {
+            viewModel.refreshData()
+        }
 
         with(binding.recyclerView) {
             setHasFixedSize(true)
@@ -57,6 +69,7 @@ class LandingFragment : Fragment(),
                 Log.i(DBG, "${login.target} (${login.target_url})")
                 loginUrls.append(login.target_url + "\n")
             }
+            swipeLayout.isRefreshing = false
         })
 
         viewModel.breachData.observe(viewLifecycleOwner, Observer {
@@ -76,6 +89,9 @@ class LandingFragment : Fragment(),
                 breachNames.append(breach.Name + "\n")
             }
             Log.i(HIBP, "Breaches: " + it.breach.count())
+
+            it.dataEntity?.breachCount = it.breach.count()
+            adapter.notifyDataSetChanged()
         })
 
         viewModel.loginList?.observe(viewLifecycleOwner, Observer {
@@ -142,7 +158,7 @@ class LandingFragment : Fragment(),
 
         //Handling ID of item clicked, passing action to nav controller to navigate to the editor
         val navAction = LandingFragmentDirections.actionEditLogin(itemId)
-        findNavController().navigate(navAction)
+        navController.navigate(navAction)
     }
 
 }

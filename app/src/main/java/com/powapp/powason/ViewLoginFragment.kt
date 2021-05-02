@@ -18,6 +18,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.powapp.powason.databinding.ViewLoginFragmentBinding
 import com.powapp.powason.util.CURSOR_POSITION_KEY
 import com.powapp.powason.util.EDIT_TEXT_KEY
+import com.powapp.powason.util.FAVICON_API
 import java.security.SecureRandom
 import java.util.*
 
@@ -31,7 +32,7 @@ class ViewLoginFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         //For navigating backwards up the navigation chain - adds back button
         (activity as AppCompatActivity).supportActionBar?.let {
             it.setHomeButtonEnabled(true)
@@ -96,7 +97,7 @@ class ViewLoginFragment : Fragment() {
 
             //Load favicon for this site
             Glide.with(binding.loginFaviconView.context)
-                .load("https://www.google.com/s2/favicons?sz=128&domain_url=" + viewModel.savedSite.value?.toString())
+                .load(FAVICON_API + viewModel.savedSite.value?.toString())
                 //Sets the icon to loading animation while
                 //waiting for the app to load the favicon or error out
                 .thumbnail(Glide.with(binding.loginFaviconView.context).load(R.drawable.loading))

@@ -9,6 +9,8 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.powapp.powason.data.DataEntity
 import com.powapp.powason.databinding.ListItemBinding
+import com.powapp.powason.util.DBG
+import com.powapp.powason.util.FAVICON_API
 import java.lang.Exception
 
 class LoginListAdapter(
@@ -40,6 +42,10 @@ class LoginListAdapter(
             //Set the data for the list_item layout
             loginTitle.text = login.title
             loginTarget.text = login.target_name
+            Log.i("xyz", login.breachCount.toString())
+            if (login.breachCount!! > 0) {
+                breachCount.text = login.breachCount.toString()
+            }
 
             generateFavicon(this)
 
@@ -57,18 +63,16 @@ class LoginListAdapter(
 
     override fun getItemCount() = loginList.size
 
-
     //Function for generating the favicons for the account logins
     private fun generateFavicon(itemBinding: ListItemBinding) {
-        //Google's icon getting API
-        val baseFaviconUrl: String = "https://www.google.com/s2/favicons?sz=128&domain_url="
+        //Using Google's icon getting API
         with (itemBinding) {
             //Get live favicons from site using Google's favicon generating API
             try {
                 //Alternative loading method:
                 //loginFavicon.setImageResource(R.drawable.loading)
                 Glide.with(loginFavicon.context)
-                    .load(baseFaviconUrl + loginTarget.text)
+                    .load(FAVICON_API + loginTarget.text)
                     //Sets the icon to loading animation while
                     //waiting for the app to load the favicon or error out
                     .thumbnail(Glide.with(loginFavicon.context).load(R.drawable.loading))

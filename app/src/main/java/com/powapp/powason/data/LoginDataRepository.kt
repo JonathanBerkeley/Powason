@@ -34,9 +34,7 @@ class LoginDataRepository(val app: Application) {
      */
 
     init {
-        CoroutineScope(Dispatchers.IO).launch {
-            callWebService()
-        }
+        refreshData()
         Log.i(DBG, "Network availability: ${networkAvailable()}")
     }
 
@@ -104,6 +102,12 @@ class LoginDataRepository(val app: Application) {
     public fun checkForBreaches(account: DataEntity?) {
         CoroutineScope(Dispatchers.IO).launch {
             callHIBPAccountApi(account)
+        }
+    }
+
+    fun refreshData() {
+        CoroutineScope(Dispatchers.IO).launch {
+            callWebService()
         }
     }
 }

@@ -14,7 +14,8 @@ data class DataEntity(
     var target: String,
     var target_name: String,
     var password: String?,
-    var username: String?
+    var username: String?,
+    var breachCount: Int? = 0
 ) {
     //Constructors for the login data
     constructor() : this(NEW_ENTRY_ID, Date(), "", "", "", "", "")

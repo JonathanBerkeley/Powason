@@ -13,6 +13,9 @@
         <action
             android:id="@+id/action_edit_login"
             app:destination="@id/viewLoginFragment" />
+        <action
+            android:id="@+id/action_nav_detail"
+            app:destination="@id/detailFragment" />
     </fragment>
     <fragment
         android:id="@+id/viewLoginFragment"
@@ -24,4 +27,9 @@
             app:argType="integer"
             android:defaultValue="0" />
     </fragment>
+    <fragment
+        android:id="@+id/detailFragment"
+        android:name="com.powapp.powason.DetailFragment"
+        android:label="fragment_detail"
+        tools:layout="@layout/fragment_detail" />
 </navigation>

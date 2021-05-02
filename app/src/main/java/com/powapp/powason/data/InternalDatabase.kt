@@ -2,6 +2,7 @@ package com.powapp.powason.data
 
 import android.content.Context
 import androidx.room.*
+import com.powapp.powason.util.APP_VERSION
 
 @Database (entities = [DataEntity::class], version = 1, exportSchema = false)
 @TypeConverters(DateConverter::class)
@@ -19,7 +20,7 @@ abstract class InternalDatabase : RoomDatabase() {
                     INSTANCE = Room.databaseBuilder(
                         context.applicationContext,
                         InternalDatabase::class.java,
-                        "powa_logins.db"
+                        "powason_logins.db"
                     ).build()
                 }
             }

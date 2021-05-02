@@ -1,7 +1,6 @@
-package com.powapp.powason.ui.main
+package com.powapp.powason.ui.shared
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.powapp.powason.data.*
@@ -10,7 +9,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 
-class LandingViewModel(app: Application) : AndroidViewModel(app) {
+class SharedViewModel(app: Application) : AndroidViewModel(app) {
     //Creates database instance (if it doesn't currently exist) with the current application context
     private val database = InternalDatabase.getInstance(app)
 
@@ -58,5 +57,9 @@ class LandingViewModel(app: Application) : AndroidViewModel(app) {
                 }
             }
         }
+    }
+
+    fun refreshData() {
+        dataRepository.refreshData()
     }
 }
