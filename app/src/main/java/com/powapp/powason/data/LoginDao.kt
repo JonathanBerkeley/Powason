@@ -24,6 +24,9 @@ interface LoginDao {
     @Query("SELECT COUNT(*) FROM logins")
     fun getCount(): Int
 
+    @Query("UPDATE logins SET breachCount = :count WHERE id = :id")
+    fun modifyBreachCount(id: Int, count: Int)
+
     //Empties database for testing purposes when dev menu is enabled
     @Query("DELETE FROM logins WHERE 1 = 1")
     fun emptyDatabase()

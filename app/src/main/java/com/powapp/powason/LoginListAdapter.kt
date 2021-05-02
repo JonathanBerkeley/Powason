@@ -42,7 +42,7 @@ class LoginListAdapter(
             //Set the data for the list_item layout
             loginTitle.text = login.title
             loginTarget.text = login.target_name
-            Log.i("xyz", login.breachCount.toString())
+            Log.i("Hello, world", login.breachCount.toString())
             if (login.breachCount!! > 0) {
                 breachCount.text = login.breachCount.toString()
             }
@@ -55,6 +55,7 @@ class LoginListAdapter(
             }
         }
     }
+
 
     interface ListItemListener {
         //Implemented by the LandingFragment
@@ -83,6 +84,15 @@ class LoginListAdapter(
                     .into(loginFavicon)
             } catch (ex: Exception) {
                 Log.e("Glide exception", "$ex")
+            }
+        }
+    }
+
+    private fun securityCheck(itemBinding: ListItemBinding) {
+        with (itemBinding) {
+            try {
+            } catch (ex: Exception) {
+                Log.e("Secucheck exception", "$ex")
             }
         }
     }

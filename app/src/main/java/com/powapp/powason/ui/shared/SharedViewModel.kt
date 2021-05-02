@@ -30,6 +30,15 @@ class SharedViewModel(app: Application) : AndroidViewModel(app) {
         }
     }
 
+    fun modifyBreachCount(id: Int, count: Int) {
+        //Start a coroutine
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                database?.loginDao()?.modifyBreachCount(id, count)
+            }
+        }
+    }
+
     fun deleteAllListings() {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
@@ -43,7 +52,6 @@ class SharedViewModel(app: Application) : AndroidViewModel(app) {
     fun checkAccountSecurity() {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
-
                 val databaseSize: Int? = database?.loginDao()?.getCount()
 
                 for (entry in 0..databaseSize!! + 1) {
