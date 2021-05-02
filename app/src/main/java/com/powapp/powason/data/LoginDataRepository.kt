@@ -1,5 +1,6 @@
 package com.powapp.powason.data
 
+import android.annotation.SuppressLint
 import android.app.Application
 import android.content.Context
 import android.net.ConnectivityManager
@@ -24,7 +25,7 @@ import java.net.SocketTimeoutException
 class LoginDataRepository(val app: Application) {
 
     val loginData = MutableLiveData<List<Login>>()
-    val breachData = MutableLiveData<List<Breach>>()
+    val breachData = MutableLiveData<AccountData>()
 
     /*
     private val listType = Types.newParameterizedType(
@@ -35,7 +36,6 @@ class LoginDataRepository(val app: Application) {
     init {
         CoroutineScope(Dispatchers.IO).launch {
             callWebService()
-            callHIBPWebService()
         }
         Log.i(DBG, "Network availability: ${networkAvailable()}")
     }
@@ -43,18 +43,23 @@ class LoginDataRepository(val app: Application) {
     @WorkerThread
     suspend fun callWebService() {
         if (networkAvailable()) {
-            val retrofit = Retrofit.Builder()
-                .baseUrl(WEB_SERVICE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
-            val service = retrofit.create(WebService::class.java)
-            val serviceData = service.getLoginData().body() ?: emptyList()
-            loginData.postValue(serviceData)
+            try {
+                val retrofit = Retrofit.Builder()
+                    .baseUrl(WEB_SERVICE_URL)
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build()
+                val service = retrofit.create(WebService::class.java)
+                val serviceData = service.getLoginData().body() ?: emptyList()
+                loginData.postValue(serviceData)
+            }
+            catch (e: SocketTimeoutException) {
+                Log.i(DBG, "Couldn't connect to web service")
+            }
         }
     }
 
     @WorkerThread
-    suspend fun callHIBPWebService() {
+    private suspend fun callHIBPAccountApi(account: DataEntity?) {
         if (networkAvailable()) {
             try {
                 val retrofit = Retrofit.Builder()
@@ -62,8 +67,13 @@ class LoginDataRepository(val app: Application) {
                     .addConverterFactory(GsonConverterFactory.create())
                     .build()
                 val service = retrofit.create(HIBPService::class.java)
-                val serviceData = service.getBreachData().body() ?: emptyList()
-                breachData.postValue(serviceData)
+
+                if (account?.username != null) {
+                    val serviceData = service.getBreachData(email = account.username!!).body() ?: emptyList()
+
+                    val ac = AccountData(account, serviceData)
+                    breachData.postValue(ac)
+                }
             }
             catch (e: SocketTimeoutException) {
                 Log.i(DBG, "Couldn't connect to remote web service")
@@ -82,9 +92,18 @@ class LoginDataRepository(val app: Application) {
     }
     */
 
+    @Suppress("DEPRECATION")
+    // Despite investigation, there is no easy replacement for this
+    // The new options require a high target API level which would make this less backwards compatible
     private fun networkAvailable(): Boolean {
         val connectivityManager = app.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val networkInfo = connectivityManager.activeNetworkInfo
         return networkInfo?.isConnectedOrConnecting ?: false
+    }
+
+    public fun checkForBreaches(account: DataEntity?) {
+        CoroutineScope(Dispatchers.IO).launch {
+            callHIBPAccountApi(account)
+        }
     }
 }

@@ -14,10 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.powapp.powason.LoginListAdapter
 import com.powapp.powason.R
 import com.powapp.powason.databinding.LandingFragmentBinding
-import com.powapp.powason.util.APP_VERSION
-import com.powapp.powason.util.DBG
-import com.powapp.powason.util.DEV_MODE
-import com.powapp.powason.util.NEW_ENTRY_ID
+import com.powapp.powason.util.*
 
 class LandingFragment : Fragment(),
     LoginListAdapter.ListItemListener {
@@ -62,9 +59,20 @@ class LandingFragment : Fragment(),
         })
 
         viewModel.breachData.observe(viewLifecycleOwner, Observer {
-            val breachBody = StringBuilder()
-            for (breach in it) {
-                Log.i("HIBP", breach.Name + " :D")
+            val breachNames = StringBuilder()
+
+            if (DEV_MODE && it.dataEntity?.username != "") {
+                Log.i(HIBP, "Breaches for: " + it.dataEntity?.username)
+
+                //If no breach was found
+                if (it.isEmpty()) {
+                    Log.i(HIBP, "No breach found!")
+                }
+            }
+
+            for (breach in it.breach) {
+                Log.i(HIBP, breach.Name)
+                breachNames.append(breach.Name + "\n")
             }
         })
 

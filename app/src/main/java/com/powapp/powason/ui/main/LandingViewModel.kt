@@ -1,11 +1,10 @@
 package com.powapp.powason.ui.main
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.powapp.powason.data.InternalDatabase
-import com.powapp.powason.data.LoginDataRepository
-import com.powapp.powason.data.SampleDataProvider
+import com.powapp.powason.data.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -46,6 +45,17 @@ class LandingViewModel(app: Application) : AndroidViewModel(app) {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
 
+                val databaseSize: Int? = database?.loginDao()?.getCount()
+
+                for (entry in 0..databaseSize!! + 1) {
+                    val acc: DataEntity? = database?.loginDao()?.getLoginById(entry)
+
+                    if (acc != null) {
+                        with(dataRepository) {
+                            checkForBreaches(acc)
+                        }
+                    }
+                }
             }
         }
     }

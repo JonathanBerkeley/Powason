@@ -1,5 +1,6 @@
 package com.powapp.powason.data
 
+import android.accounts.Account
 import androidx.lifecycle.LiveData
 import androidx.room.*
 
