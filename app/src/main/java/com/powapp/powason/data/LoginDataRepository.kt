@@ -1,25 +1,21 @@
 package com.powapp.powason.data
 
-import android.annotation.SuppressLint
 import android.app.Application
 import android.content.Context
 import android.net.ConnectivityManager
 import android.util.Log
 import androidx.annotation.WorkerThread
+import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.MutableLiveData
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.powapp.powason.util.DBG
-import com.powapp.powason.util.FileHelper
 import com.powapp.powason.util.WEB_HIBP_URL
 import com.powapp.powason.util.WEB_SERVICE_URL
-import com.squareup.moshi.JsonAdapter
-import com.squareup.moshi.Moshi
-import com.squareup.moshi.Types
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.converter.moshi.MoshiConverterFactory
 import java.net.SocketTimeoutException
 
 class LoginDataRepository(val app: Application) {
@@ -27,6 +23,8 @@ class LoginDataRepository(val app: Application) {
     val loginData = MutableLiveData<List<Login>>()
     val breachData = MutableLiveData<AccountData>()
 
+    private var badConnectionHIBP: Boolean = false
+    private var badConnectionWS: Boolean = false
     /*
     private val listType = Types.newParameterizedType(
         List::class.java, Login::class.java
@@ -41,7 +39,7 @@ class LoginDataRepository(val app: Application) {
     @WorkerThread
     suspend fun callWebService() {
         if (networkAvailable()) {
-            try {
+            badConnectionWS = try {
                 val retrofit = Retrofit.Builder()
                     .baseUrl(WEB_SERVICE_URL)
                     .addConverterFactory(GsonConverterFactory.create())
@@ -49,32 +47,34 @@ class LoginDataRepository(val app: Application) {
                 val service = retrofit.create(WebService::class.java)
                 val serviceData = service.getLoginData().body() ?: emptyList()
                 loginData.postValue(serviceData)
-            }
-            catch (e: SocketTimeoutException) {
+                false
+            } catch (e: SocketTimeoutException) {
                 Log.i(DBG, "Couldn't connect to web service")
+                true
             }
         }
     }
 
     @WorkerThread
-    private suspend fun callHIBPAccountApi(account: DataEntity?) {
+    private suspend fun callHIBPAccountApi(account: DataEntity?, type: RequestType) {
         if (networkAvailable()) {
-            try {
+            badConnectionHIBP = try {
                 val retrofit = Retrofit.Builder()
                     .baseUrl(WEB_HIBP_URL)
                     .addConverterFactory(GsonConverterFactory.create())
                     .build()
                 val service = retrofit.create(HIBPService::class.java)
 
-                if (account?.username != null) {
-                    val serviceData = service.getBreachData(email = account.username!!).body() ?: emptyList()
+                if (account?.username != null && type == RequestType.LOW_DATA) {
+                    val serviceData = service.getBreachName(email = account.username!!).body() ?: emptyList()
 
                     val ac = AccountData(account, serviceData)
                     breachData.postValue(ac)
                 }
-            }
-            catch (e: SocketTimeoutException) {
+                false
+            } catch (e: SocketTimeoutException) {
                 Log.i(DBG, "Couldn't connect to remote web service")
+                true
             }
         }
     }
@@ -99,15 +99,49 @@ class LoginDataRepository(val app: Application) {
         return networkInfo?.isConnectedOrConnecting ?: false
     }
 
-    public fun checkForBreaches(account: DataEntity?) {
+    fun checkForBreaches(account: DataEntity?, type: RequestType) {
         CoroutineScope(Dispatchers.IO).launch {
-            callHIBPAccountApi(account)
+            callHIBPAccountApi(account, type)
         }
     }
 
-    fun refreshData() {
+    private fun refreshData() {
         CoroutineScope(Dispatchers.IO).launch {
             callWebService()
         }
+    }
+
+    fun refreshData(swipeLayout: SwipeRefreshLayout) {
+        CoroutineScope(Dispatchers.IO).launch {
+            callWebService()
+        }
+
+        val connected: Boolean = networkAvailable()
+        if (!connected || badConnectionHIBP || badConnectionWS) {
+            //Alert the user to the lack of internet connection
+            val alertDialogBuilder = AlertDialog.Builder(swipeLayout.context)
+            alertDialogBuilder.setTitle("Alert")
+            if (!connected) {
+                alertDialogBuilder.setMessage(
+                    "Could not connect to internet " +
+                            "- check your internet connection and try again"
+                )
+            } else if (badConnectionHIBP) {
+                alertDialogBuilder.setMessage(
+                    "Could not connect to third party api " +
+                            "- try again later"
+                )
+            } else if (badConnectionWS) {
+                alertDialogBuilder.setMessage(
+                    "Could not connect to web service " +
+                            "- try again later"
+                )
+            }
+            alertDialogBuilder.setPositiveButton("Ok", null)
+            alertDialogBuilder.show()
+        }
+
+        //This stops the refreshing animation
+        swipeLayout.isRefreshing = false
     }
 }

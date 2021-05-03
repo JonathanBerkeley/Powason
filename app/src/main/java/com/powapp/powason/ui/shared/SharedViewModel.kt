@@ -3,6 +3,7 @@ package com.powapp.powason.ui.shared
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.powapp.powason.data.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -58,7 +59,7 @@ class SharedViewModel(app: Application) : AndroidViewModel(app) {
                     val acc: DataEntity? = database?.loginDao()?.getLoginById(entry)
                     if (acc != null) {
                         with(dataRepository) {
-                            checkForBreaches(acc)
+                            checkForBreaches(acc, RequestType.LOW_DATA)
                         }
                     }
                 }
@@ -66,7 +67,7 @@ class SharedViewModel(app: Application) : AndroidViewModel(app) {
         }
     }
 
-    fun refreshData() {
-        dataRepository.refreshData()
+    fun refreshData(swipeLayout: SwipeRefreshLayout) {
+        dataRepository.refreshData(swipeLayout)
     }
 }

@@ -10,6 +10,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.powapp.powason.data.DataEntity
 import com.powapp.powason.databinding.ListItemBinding
+import com.powapp.powason.util.DBG
 import com.powapp.powason.util.FAVICON_API
 import com.powapp.powason.util.HashHelper
 import java.lang.Exception
@@ -65,6 +66,11 @@ class LoginListAdapter(
             }
 
             generateFavicon(this)
+
+            //Button listener
+            breachViewerBtn.setOnClickListener {
+                Log.i(DBG, "Hello world")
+            }
 
             //For listening for user clicks on the data in recycler view
             root.setOnClickListener {

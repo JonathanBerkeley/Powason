@@ -10,7 +10,6 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -19,6 +18,8 @@ import com.powapp.powason.R
 import com.powapp.powason.databinding.LandingFragmentBinding
 import com.powapp.powason.ui.shared.SharedViewModel
 import com.powapp.powason.util.*
+import java.util.*
+import kotlin.concurrent.timer
 
 class LandingFragment : Fragment(),
     LoginListAdapter.ListItemListener {
@@ -39,7 +40,6 @@ class LandingFragment : Fragment(),
             .supportActionBar?.setDisplayHomeAsUpEnabled(false)
 
         requireActivity().title = "Accounts"
-        Log.i("App init, version: ", APP_VERSION)
 
         //Enables the options menu for this fragment
         setHasOptionsMenu(true)
@@ -52,7 +52,8 @@ class LandingFragment : Fragment(),
         viewModel = ViewModelProvider(requireActivity()).get(SharedViewModel::class.java)
         swipeLayout = binding.swipeLayout
         swipeLayout.setOnRefreshListener {
-            viewModel.refreshData()
+            viewModel.refreshData(swipeLayout)
+            checkAccountSecurity()
         }
 
         with(binding.recyclerView) {
@@ -105,6 +106,9 @@ class LandingFragment : Fragment(),
         binding.floatingActionButton.setOnClickListener {
             onItemClick(NEW_ENTRY_ID)
         }
+
+        checkAccountSecurity()
+
         return binding.root
     }
 
@@ -130,6 +134,8 @@ class LandingFragment : Fragment(),
     //Development function for adding sample data for testing
     private fun addSampleData(): Boolean {
         viewModel.addSampleData()
+        Thread.sleep(100) //Tiny delay to prevent race condition
+        checkAccountSecurity()
         return true
     }
 
@@ -160,5 +166,4 @@ class LandingFragment : Fragment(),
         val navAction = LandingFragmentDirections.actionEditLogin(itemId)
         navController.navigate(navAction)
     }
-
 }
