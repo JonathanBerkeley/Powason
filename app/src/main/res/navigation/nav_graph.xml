@@ -19,7 +19,7 @@
     </fragment>
     <fragment
         android:id="@+id/viewLoginFragment"
-        android:name="com.powapp.powason.ViewLoginFragment"
+        android:name="com.powapp.powason.ui.login.ViewLoginFragment"
         android:label="view_login_fragment"
         tools:layout="@layout/view_login_fragment" >
         <argument
@@ -29,7 +29,7 @@
     </fragment>
     <fragment
         android:id="@+id/detailFragment"
-        android:name="com.powapp.powason.DetailFragment"
+        android:name="com.powapp.powason.ui.detail.DetailFragment"
         android:label="fragment_detail"
         tools:layout="@layout/fragment_detail" >
         <argument

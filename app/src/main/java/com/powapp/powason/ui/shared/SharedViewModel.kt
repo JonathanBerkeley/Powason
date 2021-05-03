@@ -11,7 +11,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import kotlin.concurrent.thread
 
 
 class SharedViewModel(app: Application) : AndroidViewModel(app) {
@@ -21,9 +20,9 @@ class SharedViewModel(app: Application) : AndroidViewModel(app) {
     //Fetches live data from the database
     val loginList = database?.loginDao()?.getAll()
 
-    private val dataRepository = LoginDataRepository(app)
+    val dataRepository = LoginDataRepository(app)
     val loginData = dataRepository.loginData
-    val breachData = dataRepository.breachData
+    val breachData = dataRepository.breachName
 
     fun addSampleData() {
         //Start a coroutine

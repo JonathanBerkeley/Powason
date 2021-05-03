@@ -21,15 +21,11 @@ import java.net.SocketTimeoutException
 class LoginDataRepository(val app: Application) {
 
     val loginData = MutableLiveData<List<Login>>()
-    val breachData = MutableLiveData<AccountData>()
+    val breachName = MutableLiveData<AccountData>()
+    val breachInfo = MutableLiveData<AccountDataFull>()
 
     private var badConnectionHIBP: Boolean = false
     private var badConnectionWS: Boolean = false
-    /*
-    private val listType = Types.newParameterizedType(
-        List::class.java, Login::class.java
-    )
-     */
 
     init {
         refreshData()
@@ -56,7 +52,7 @@ class LoginDataRepository(val app: Application) {
     }
 
     @WorkerThread
-    private suspend fun callHIBPAccountApi(account: DataEntity?, type: RequestType) {
+    suspend fun callHIBPAccountApi(account: DataEntity?, type: RequestType) {
         if (networkAvailable()) {
             badConnectionHIBP = try {
                 val retrofit = Retrofit.Builder()
@@ -65,12 +61,22 @@ class LoginDataRepository(val app: Application) {
                     .build()
                 val service = retrofit.create(HIBPService::class.java)
 
-                if (account?.username != null && type == RequestType.LOW_DATA) {
-                    val serviceData = service.getBreachName(email = account.username!!).body() ?: emptyList()
+                if (account?.username != null) {
+                    if (type == RequestType.LOW_DATA) {
+                        val serviceData =
+                            service.getBreachName(email = account.username!!).body() ?: emptyList()
 
-                    val ac = AccountData(account, serviceData)
-                    breachData.postValue(ac)
+                        val ac = AccountData(account, serviceData)
+                        breachName.postValue(ac)
+                    } else if (type == RequestType.FULL_DATA) {
+                        val serviceData =
+                            service.getBreachInfo(email = account.username!!).body() ?: emptyList()
+
+                        val ac = AccountDataFull(account, serviceData)
+                        breachInfo.postValue(ac)
+                    }
                 }
+
                 false
             } catch (e: SocketTimeoutException) {
                 Log.i(DBG, "Couldn't connect to remote web service")

@@ -13,7 +13,7 @@
         android:supportsRtl="true"
         android:usesCleartextTraffic="true"
         android:theme="@style/Theme.Powa">
-        <activity android:name="com.powapp.powason.MainActivity">
+        <activity android:name="com.powapp.powason.ui.main.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

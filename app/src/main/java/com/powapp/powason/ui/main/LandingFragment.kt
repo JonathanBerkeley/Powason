@@ -13,13 +13,13 @@ import androidx.navigation.Navigation
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.powapp.powason.LoginListAdapter
+import com.powapp.powason.ui.login.LoginListAdapter
 import com.powapp.powason.R
 import com.powapp.powason.databinding.LandingFragmentBinding
+import com.powapp.powason.ui.detail.DetailsListAdapter
 import com.powapp.powason.ui.shared.SharedViewModel
 import com.powapp.powason.util.*
 import java.util.*
-import kotlin.concurrent.timer
 
 class LandingFragment : Fragment(),
     LoginListAdapter.ListItemListener {
@@ -30,7 +30,8 @@ class LandingFragment : Fragment(),
     private lateinit var swipeLayout: SwipeRefreshLayout
     private lateinit var navController: NavController
 
-    private var adapter: LoginListAdapter? = null
+    private var loginListAdapter: LoginListAdapter? = null
+    private var detailListAdapter: DetailsListAdapter? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -94,14 +95,14 @@ class LandingFragment : Fragment(),
             Log.i(HIBP, "Breaches: " + it.breach.count())
 
             viewModel.modifyBreachCount(it.dataEntity?.id!!, it.breach.count())
-            adapter!!.notifyDataSetChanged()
+            loginListAdapter!!.notifyDataSetChanged()
         })
 
         viewModel.loginList?.observe(viewLifecycleOwner, Observer {
             Log.i("dataLogging!", it.toString())
-            adapter = LoginListAdapter(it, this@LandingFragment)
+            loginListAdapter = LoginListAdapter(it, this@LandingFragment)
 
-            binding.recyclerView.adapter = adapter
+            binding.recyclerView.adapter = loginListAdapter
             binding.recyclerView.layoutManager = LinearLayoutManager(activity)
         })
 
@@ -110,8 +111,8 @@ class LandingFragment : Fragment(),
             onItemClick(NEW_ENTRY_ID)
         }
 
-        if (QUERY_ON_FOCUS && adapter != null)
-            checkAccountSecurity(adapter!!.itemCount + 1) // Can induce 429 response if unrestricted
+        if (QUERY_ON_FOCUS && loginListAdapter != null)
+            checkAccountSecurity(loginListAdapter!!.itemCount + 1) // Can induce 429 response if unrestricted
 
         return binding.root
     }

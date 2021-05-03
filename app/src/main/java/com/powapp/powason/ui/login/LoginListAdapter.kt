@@ -1,4 +1,4 @@
-package com.powapp.powason
+package com.powapp.powason.ui.login
 
 import android.util.Log
 import android.view.LayoutInflater
@@ -8,11 +8,11 @@ import android.widget.Button
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.powapp.powason.R
 import com.powapp.powason.data.DataEntity
 import com.powapp.powason.databinding.ListItemBinding
 import com.powapp.powason.util.DBG
 import com.powapp.powason.util.FAVICON_API
-import com.powapp.powason.util.HashHelper
 import java.lang.Exception
 
 class LoginListAdapter(
@@ -25,8 +25,8 @@ class LoginListAdapter(
     //Gets a reference to the root view of the list_view.xml file
     inner class ViewHolder(itemView: View) :
         RecyclerView.ViewHolder(itemView) {
-        val binding = ListItemBinding.bind(itemView)
-    }
+            val binding = ListItemBinding.bind(itemView)
+        }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
