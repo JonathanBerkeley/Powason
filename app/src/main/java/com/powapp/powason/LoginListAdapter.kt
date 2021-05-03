@@ -4,12 +4,12 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.powapp.powason.data.DataEntity
 import com.powapp.powason.databinding.ListItemBinding
-import com.powapp.powason.util.DBG
 import com.powapp.powason.util.FAVICON_API
 import java.lang.Exception
 
@@ -41,10 +41,28 @@ class LoginListAdapter(
         with(holder.binding) {
             //Set the data for the list_item layout
             loginTitle.text = login.title
+            
+
+
+            //Shortens display of title if too long
+            if (login.title.length > 22) {
+                loginTitle.text = (login.title.substring(startIndex = 0, endIndex = 21) + "..")
+            }
             loginTarget.text = login.target_name
-            Log.i("Hello, world", login.breachCount.toString())
+
+            //Get a reference to the button
+            val breachViewerBtn: Button = breachCountBtn
+
+            //Build text for button with warning emoji
             if (login.breachCount!! > 0) {
-                breachCount.text = login.breachCount.toString()
+                breachViewerBtn.visibility = View.VISIBLE
+                breachCountBtn.text = ((
+                        if (login.breachCount!! > 99) "99+"
+                        else login.breachCount.toString()
+                        ) + " ⚠️")
+            }
+            else run {
+                breachViewerBtn.visibility = View.GONE
             }
 
             generateFavicon(this)

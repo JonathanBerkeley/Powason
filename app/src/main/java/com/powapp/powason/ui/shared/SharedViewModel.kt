@@ -54,9 +54,8 @@ class SharedViewModel(app: Application) : AndroidViewModel(app) {
             withContext(Dispatchers.IO) {
                 val databaseSize: Int? = database?.loginDao()?.getCount()
 
-                for (entry in 0..databaseSize!! + 1) {
+                for (entry in 0..databaseSize!!) {
                     val acc: DataEntity? = database?.loginDao()?.getLoginById(entry)
-
                     if (acc != null) {
                         with(dataRepository) {
                             checkForBreaches(acc)
