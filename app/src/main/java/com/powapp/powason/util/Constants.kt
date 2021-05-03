@@ -18,4 +18,4 @@ const val EDIT_TEXT_KEY = "editTextKey"
 const val CURSOR_POSITION_KEY = "cursorPositionKey"
 
 //Versioning
-const val APP_VERSION = "0.1.9"
+const val APP_VERSION = "0.2.0"

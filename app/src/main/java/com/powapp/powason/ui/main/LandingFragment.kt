@@ -90,7 +90,6 @@ class LandingFragment : Fragment(),
             }
             Log.i(HIBP, "Breaches: " + it.breach.count())
 
-            it.dataEntity?.breachCount = it.breach.count()
             viewModel.modifyBreachCount(it.dataEntity?.id!!, it.breach.count())
             adapter.notifyDataSetChanged()
         })

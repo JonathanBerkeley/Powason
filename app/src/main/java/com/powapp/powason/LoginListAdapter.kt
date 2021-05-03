@@ -11,6 +11,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.powapp.powason.data.DataEntity
 import com.powapp.powason.databinding.ListItemBinding
 import com.powapp.powason.util.FAVICON_API
+import com.powapp.powason.util.HashHelper
 import java.lang.Exception
 
 class LoginListAdapter(
@@ -41,8 +42,6 @@ class LoginListAdapter(
         with(holder.binding) {
             //Set the data for the list_item layout
             loginTitle.text = login.title
-            
-
 
             //Shortens display of title if too long
             if (login.title.length > 22) {
@@ -60,8 +59,8 @@ class LoginListAdapter(
                         if (login.breachCount!! > 99) "99+"
                         else login.breachCount.toString()
                         ) + " ⚠️")
-            }
-            else run {
+
+            } else run {
                 breachViewerBtn.visibility = View.GONE
             }
 
