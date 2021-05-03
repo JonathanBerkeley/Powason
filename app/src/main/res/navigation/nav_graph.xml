@@ -31,5 +31,10 @@
         android:id="@+id/detailFragment"
         android:name="com.powapp.powason.DetailFragment"
         android:label="fragment_detail"
-        tools:layout="@layout/fragment_detail" />
+        tools:layout="@layout/fragment_detail" >
+        <argument
+            android:name="loginId"
+            app:argType="integer"
+            android:defaultValue="0" />
+    </fragment>
 </navigation>

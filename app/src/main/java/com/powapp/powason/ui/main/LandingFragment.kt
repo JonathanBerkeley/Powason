@@ -26,9 +26,11 @@ class LandingFragment : Fragment(),
 
     private lateinit var viewModel: SharedViewModel
     private lateinit var binding: LandingFragmentBinding
-    private lateinit var adapter: LoginListAdapter
+
     private lateinit var swipeLayout: SwipeRefreshLayout
     private lateinit var navController: NavController
+
+    private var adapter: LoginListAdapter? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -92,12 +94,13 @@ class LandingFragment : Fragment(),
             Log.i(HIBP, "Breaches: " + it.breach.count())
 
             viewModel.modifyBreachCount(it.dataEntity?.id!!, it.breach.count())
-            adapter.notifyDataSetChanged()
+            adapter!!.notifyDataSetChanged()
         })
 
         viewModel.loginList?.observe(viewLifecycleOwner, Observer {
             Log.i("dataLogging!", it.toString())
             adapter = LoginListAdapter(it, this@LandingFragment)
+
             binding.recyclerView.adapter = adapter
             binding.recyclerView.layoutManager = LinearLayoutManager(activity)
         })
@@ -107,7 +110,8 @@ class LandingFragment : Fragment(),
             onItemClick(NEW_ENTRY_ID)
         }
 
-        checkAccountSecurity()
+        if (QUERY_ON_FOCUS && adapter != null)
+            checkAccountSecurity(adapter!!.itemCount + 1) // Can induce 429 response if unrestricted
 
         return binding.root
     }
@@ -158,12 +162,22 @@ class LandingFragment : Fragment(),
         return true
     }
 
+    private fun checkAccountSecurity(accId: Int): Boolean {
+        viewModel.checkAccountSecurity(accId)
+        return true
+    }
+
     //LoginListAdapter interface implementation, handles clicks recycler view clicks
     override fun onItemClick(itemId: Int) {
         Log.i("itemClick", "for id $itemId")
 
         //Handling ID of item clicked, passing action to nav controller to navigate to the editor
         val navAction = LandingFragmentDirections.actionEditLogin(itemId)
+        navController.navigate(navAction)
+    }
+
+    override fun onButtonPress(itemId: Int) {
+        val navAction = LandingFragmentDirections.actionNavDetail(itemId)
         navController.navigate(navAction)
     }
 }

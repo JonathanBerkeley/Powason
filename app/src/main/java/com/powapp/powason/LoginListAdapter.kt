@@ -62,6 +62,7 @@ class LoginListAdapter(
                         ) + " ⚠️")
 
             } else run {
+                //Hide button if there's no breach for the account
                 breachViewerBtn.visibility = View.GONE
             }
 
@@ -70,6 +71,7 @@ class LoginListAdapter(
             //Button listener
             breachViewerBtn.setOnClickListener {
                 Log.i(DBG, "Hello world")
+                listener.onButtonPress(login.id)
             }
 
             //For listening for user clicks on the data in recycler view
@@ -83,6 +85,7 @@ class LoginListAdapter(
     interface ListItemListener {
         //Implemented by the LandingFragment
         fun onItemClick(itemId: Int)
+        fun onButtonPress(itemId: Int)
     }
 
     override fun getItemCount() = loginList.size

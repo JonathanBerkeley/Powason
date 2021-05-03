@@ -65,6 +65,7 @@ class ViewLoginFragment : Fragment() {
         viewModel.injectLoginById(args.loginId)
         viewModel.getLastSavedSite(args.loginId)
 
+
         //Sets data to object data passed in from users click
         //and maintains application data through device updates such as rotation
         viewModel.currentLoginData.observe(viewLifecycleOwner, Observer {

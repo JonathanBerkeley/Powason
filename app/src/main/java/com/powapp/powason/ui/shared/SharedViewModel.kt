@@ -5,9 +5,13 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.powapp.powason.data.*
+import com.powapp.powason.util.OBEY_API_LIMIT
+import com.powapp.powason.util.OBEY_API_STRICT
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import kotlin.concurrent.thread
 
 
 class SharedViewModel(app: Application) : AndroidViewModel(app) {
@@ -55,13 +59,28 @@ class SharedViewModel(app: Application) : AndroidViewModel(app) {
             withContext(Dispatchers.IO) {
                 val databaseSize: Int? = database?.loginDao()?.getCount()
 
-                for (entry in 0..databaseSize!!) {
+                for (entry in databaseSize!! downTo 0) {
                     val acc: DataEntity? = database?.loginDao()?.getLoginById(entry)
                     if (acc != null) {
                         with(dataRepository) {
                             checkForBreaches(acc, RequestType.LOW_DATA)
                         }
                     }
+                    if (OBEY_API_STRICT)
+                        delay(2100) // Delay to keep the API happy
+                    else if (OBEY_API_LIMIT)
+                        delay(1100) // Can still induce 429 response
+                }
+            }
+        }
+    }
+
+    fun checkAccountSecurity(id: Int) {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                val acc: DataEntity? = database?.loginDao()?.getLoginById(id)
+                with(dataRepository) {
+                    checkForBreaches(acc, RequestType.LOW_DATA)
                 }
             }
         }
