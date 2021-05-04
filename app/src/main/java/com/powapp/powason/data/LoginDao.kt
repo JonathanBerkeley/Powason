@@ -24,6 +24,7 @@ interface LoginDao {
     @Query("SELECT COUNT(*) FROM logins")
     fun getCount(): Int
 
+    //Changes the breachCount variable for specified login data
     @Query("UPDATE logins SET breachCount = :count WHERE id = :id")
     fun modifyBreachCount(id: Int, count: Int)
 

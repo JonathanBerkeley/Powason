@@ -5,8 +5,9 @@ const val DEV_MODE = true
 
 //Api obedience tags
 const val OBEY_API_LIMIT = true
-const val OBEY_API_STRICT = false
-const val QUERY_ON_FOCUS = true
+const val OBEY_API_STRICT = true
+const val QUERY_ON_FOCUS = false
+const val QUERY_ALL_ON_FOCUS = true
 
 //Quick tags for logging
 const val DBG = "DEBUG_TAG"
@@ -23,4 +24,4 @@ const val EDIT_TEXT_KEY = "editTextKey"
 const val CURSOR_POSITION_KEY = "cursorPositionKey"
 
 //Versioning
-const val APP_VERSION = "0.4.0"
+const val APP_VERSION = "0.4.2"

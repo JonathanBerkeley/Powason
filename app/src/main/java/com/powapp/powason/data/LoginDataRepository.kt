@@ -20,7 +20,7 @@ import java.net.SocketTimeoutException
 
 class LoginDataRepository(val app: Application) {
 
-    val loginData = MutableLiveData<List<Login>>()
+    val loginData = MutableLiveData<List<DataEntity>>()
     val breachName = MutableLiveData<AccountData>()
     val breachInfo = MutableLiveData<AccountDataFull>()
 
@@ -111,7 +111,7 @@ class LoginDataRepository(val app: Application) {
         }
     }
 
-    private fun refreshData() {
+    fun refreshData() {
         CoroutineScope(Dispatchers.IO).launch {
             callWebService()
         }

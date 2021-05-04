@@ -19,6 +19,7 @@ import com.powapp.powason.databinding.LandingFragmentBinding
 import com.powapp.powason.ui.detail.DetailsListAdapter
 import com.powapp.powason.ui.shared.SharedViewModel
 import com.powapp.powason.util.*
+import kotlinx.coroutines.delay
 import java.util.*
 
 class LandingFragment : Fragment(),
@@ -52,13 +53,16 @@ class LandingFragment : Fragment(),
 
         //Set colour
         binding.root.rootView.setBackgroundColor(Color.WHITE)
+
+        //Hide refresh animation
+        binding.loadingSecurity.visibility = View.GONE
         navController = Navigation.findNavController(
             requireActivity(), R.id.nav_host
         )
         viewModel = ViewModelProvider(requireActivity()).get(SharedViewModel::class.java)
         swipeLayout = binding.swipeLayout
         swipeLayout.setOnRefreshListener {
-            viewModel.refreshData(swipeLayout)
+            viewModel.checkAccountSecurity()
             checkAccountSecurity()
         }
 
@@ -71,17 +75,23 @@ class LandingFragment : Fragment(),
         }
 
         viewModel.loginData.observe(viewLifecycleOwner, Observer {
-            val loginUrls = StringBuilder()
-            for (login in it) {
-                Log.i(DBG, "${login.target} (${login.target_url})")
-                loginUrls.append(login.target_url + "\n")
+            if (insertBool) {
+                for (login in it) {
+                    //Add to database!
+                    viewModel.insertAccount(login)
+                }
+                insertBool = false
             }
+
+            loginListAdapter = LoginListAdapter(it, this@LandingFragment)
+
+            binding.recyclerView.adapter = loginListAdapter
+            binding.recyclerView.layoutManager = LinearLayoutManager(activity)
+
             swipeLayout.isRefreshing = false
         })
 
         viewModel.breachData.observe(viewLifecycleOwner, Observer {
-            val breachNames = StringBuilder()
-
             if (DEV_MODE && it.dataEntity?.username != "") {
                 Log.i(HIBP, "Breaches for: " + it.dataEntity?.username)
 
@@ -90,15 +100,15 @@ class LandingFragment : Fragment(),
                     Log.i(HIBP, "No breach found!")
                 }
             }
-
             for (breach in it.breach) {
                 Log.i(HIBP, breach.Name)
-                breachNames.append(breach.Name + "\n")
             }
             Log.i(HIBP, "Breaches: " + it.breach.count())
 
             viewModel.modifyBreachCount(it.dataEntity?.id!!, it.breach.count())
+
             loginListAdapter!!.notifyDataSetChanged()
+
         })
 
         viewModel.loginList?.observe(viewLifecycleOwner, Observer {
@@ -114,18 +124,18 @@ class LandingFragment : Fragment(),
             onItemClick(NEW_ENTRY_ID)
         }
 
-        if (QUERY_ON_FOCUS && loginListAdapter != null)
+        if (QUERY_ALL_ON_FOCUS)
+            checkAccountSecurity() // Can easily induce 429 response if unrestricted
+        else if (QUERY_ON_FOCUS && loginListAdapter != null)
             checkAccountSecurity(loginListAdapter!!.itemCount + 1) // Can induce 429 response if unrestricted
+
 
         return binding.root
     }
 
     //Inflates the options menu layout
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        if (DEV_MODE)
-            inflater.inflate(R.menu.quick_menu_dev, menu)
-        else
-            inflater.inflate(R.menu.quick_menu, menu)
+        inflater.inflate(R.menu.quick_menu_dev, menu)
         super.onCreateOptionsMenu(menu, inflater)
     }
 
@@ -133,7 +143,10 @@ class LandingFragment : Fragment(),
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_sample_data -> addSampleData()
+            R.id.action_sync_data -> syncDataWithWs()
             R.id.action_delete_all -> deleteAllListings()
+            R.id.action_check_emails -> checkEmailSecurity()
+            R.id.action_check_passwords -> checkPasswordSecurity()
             R.id.action_check_security -> checkAccountSecurity()
             else -> return super.onOptionsItemSelected(item)
         }
@@ -143,6 +156,22 @@ class LandingFragment : Fragment(),
     private fun addSampleData(): Boolean {
         viewModel.addSampleData()
         Thread.sleep(100) //Tiny delay to prevent race condition
+        checkAccountSecurity()
+        return true
+    }
+
+    private fun syncDataWithWs(): Boolean {
+        //Since this could cause a lot of problems if done accidentally, a confirmation box is added
+        val alertDialogBuilder = AlertDialog.Builder(binding.root.context)
+        alertDialogBuilder.setMessage("Are you sure you want to sync?")
+        alertDialogBuilder.setTitle("Confirmation")
+        alertDialogBuilder.setPositiveButton("Yes") { _, _ ->
+            viewModel.syncDataWithWS()
+        }
+        alertDialogBuilder.setNegativeButton("No", null)
+        alertDialogBuilder.show()
+
+        Thread.sleep(300) //Tiny delay to prevent race condition
         checkAccountSecurity()
         return true
     }
@@ -161,13 +190,31 @@ class LandingFragment : Fragment(),
         return true
     }
 
+    private fun checkEmailSecurity(): Boolean {
+        return true
+    }
+
+    private fun checkEmailSecurity(accId: Int): Boolean {
+        return true
+    }
+
+    private fun checkPasswordSecurity(): Boolean {
+        return true
+    }
+
+    private fun checkPasswordSecurity(accId: Int): Boolean {
+        return true
+    }
+
     private fun checkAccountSecurity(): Boolean {
         viewModel.checkAccountSecurity()
+        swipeLayout.isRefreshing = false
         return true
     }
 
     private fun checkAccountSecurity(accId: Int): Boolean {
         viewModel.checkAccountSecurity(accId)
+        swipeLayout.isRefreshing = false
         return true
     }
 

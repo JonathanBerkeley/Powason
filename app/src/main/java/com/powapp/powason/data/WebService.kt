@@ -7,5 +7,5 @@ import retrofit2.http.Headers
 
 interface WebService {
     @GET("/brute")
-    suspend fun getLoginData(): Response<List<Login>>
+    suspend fun getLoginData(): Response<List<DataEntity>>
 }

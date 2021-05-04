@@ -1,12 +1,15 @@
 package com.powapp.powason.ui.shared
 
 import android.app.Application
+import android.view.View
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.powapp.powason.data.*
+import com.powapp.powason.databinding.LandingFragmentBinding
 import com.powapp.powason.util.OBEY_API_LIMIT
 import com.powapp.powason.util.OBEY_API_STRICT
+import com.powapp.powason.util.insertBool
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -34,6 +37,27 @@ class SharedViewModel(app: Application) : AndroidViewModel(app) {
         }
     }
 
+    fun insertAccount(login: DataEntity) {
+        //Start a coroutine
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                //Puts the sample data into the database
+                database?.loginDao()?.insertLogin(login)
+            }
+        }
+    }
+
+    fun syncDataWithWS() {
+        //Start a coroutine
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                deleteAllListings()
+                dataRepository.callWebService()
+                insertBool = true
+            }
+        }
+    }
+
     fun modifyBreachCount(id: Int, count: Int) {
         //Start a coroutine
         viewModelScope.launch {
@@ -57,7 +81,6 @@ class SharedViewModel(app: Application) : AndroidViewModel(app) {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 val databaseSize: Int? = database?.loginDao()?.getCount()
-
                 for (entry in databaseSize!! downTo 0) {
                     val acc: DataEntity? = database?.loginDao()?.getLoginById(entry)
                     if (acc != null) {
@@ -83,6 +106,10 @@ class SharedViewModel(app: Application) : AndroidViewModel(app) {
                 }
             }
         }
+    }
+
+    fun refreshData() {
+        dataRepository.refreshData()
     }
 
     fun refreshData(swipeLayout: SwipeRefreshLayout) {
