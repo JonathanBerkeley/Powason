@@ -1,5 +1,6 @@
 package com.powapp.powason.ui.main
 
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.*
@@ -48,6 +49,9 @@ class LandingFragment : Fragment(),
 
         //Inflates the fragment and returns reference to binding variable
         binding = LandingFragmentBinding.inflate(inflater, container, false)
+
+        //Set colour
+        binding.root.rootView.setBackgroundColor(Color.WHITE)
         navController = Navigation.findNavController(
             requireActivity(), R.id.nav_host
         )

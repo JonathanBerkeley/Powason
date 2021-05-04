@@ -1,6 +1,7 @@
 package com.powapp.powason.ui.detail
 
 import android.app.Activity
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -43,6 +44,7 @@ class DetailFragment : Fragment() {
         recyclerView = binding.breachRecyclerView
         sharedViewModel = ViewModelProvider(requireActivity()).get(SharedViewModel::class.java)
 
+        binding.root.rootView.setBackgroundColor(Color.WHITE)
         //For navigating backwards up the navigation chain - adds back button
         (activity as AppCompatActivity).supportActionBar?.let {
             it.setHomeButtonEnabled(true)
@@ -72,7 +74,7 @@ class DetailFragment : Fragment() {
         viewModel.injectBreachInfoById(args.loginId, sharedViewModel.dataRepository)
 
         sharedViewModel.dataRepository.breachInfo.observe(viewLifecycleOwner, Observer {
-            requireActivity().title = "Breach: " + it.dataEntity?.username
+            requireActivity().title = it.dataEntity?.username
             Log.i("Testing", "Hello, world!" + it.breachInfoData[0].Description)
             val adapter = DetailsListAdapter(requireContext(), it.breachInfoData)
             recyclerView.adapter = adapter
