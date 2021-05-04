@@ -13,7 +13,6 @@ import androidx.navigation.Navigation
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.powapp.powason.ui.login.LoginListAdapter
 import com.powapp.powason.R
 import com.powapp.powason.databinding.LandingFragmentBinding
 import com.powapp.powason.ui.detail.DetailsListAdapter

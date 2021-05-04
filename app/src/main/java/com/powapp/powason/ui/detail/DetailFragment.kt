@@ -15,8 +15,10 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.powapp.powason.R
+import com.powapp.powason.databinding.BreachItemBinding
 import com.powapp.powason.databinding.FragmentDetailBinding
 import com.powapp.powason.ui.login.ViewLoginFragmentArgs
 import com.powapp.powason.ui.shared.SharedViewModel
@@ -26,6 +28,7 @@ class DetailFragment : Fragment() {
     private lateinit var viewModel: DetailViewModel
     private lateinit var recyclerView: RecyclerView
     private lateinit var sharedViewModel: SharedViewModel
+    private lateinit var detailsListAdapter: DetailsListAdapter
 
     //Lazy evaluation of args passed in from LandingFragment
     private val args: ViewLoginFragmentArgs by navArgs()
@@ -55,11 +58,6 @@ class DetailFragment : Fragment() {
         //Creates ViewLoginViewModel file as a ViewModel that can be referenced further on
         viewModel = ViewModelProvider(this).get(DetailViewModel::class.java)
 
-        viewModel.breachInfo.observe(viewLifecycleOwner, Observer {
-            val adapter = DetailsListAdapter(requireContext(), it)
-            recyclerView.adapter = adapter
-        })
-
         //Uses the same backward navigation for the back button or hand gestures, so that navigation back with
         //the SystemUI is handled the same way
         requireActivity().onBackPressedDispatcher.addCallback(
@@ -74,7 +72,11 @@ class DetailFragment : Fragment() {
         viewModel.injectBreachInfoById(args.loginId, sharedViewModel.dataRepository)
 
         sharedViewModel.dataRepository.breachInfo.observe(viewLifecycleOwner, Observer {
+            requireActivity().title = "Breach: " + it.dataEntity?.username
             Log.i("Testing", "Hello, world!" + it.breachInfoData[0].Description)
+            val adapter = DetailsListAdapter(requireContext(), it.breachInfoData)
+            recyclerView.adapter = adapter
+            recyclerView.layoutManager = LinearLayoutManager(activity)
         })
 
         return binding.root

@@ -17,10 +17,7 @@ class DetailViewModel(app: Application): AndroidViewModel(app) {
     private val database = InternalDatabase.getInstance(app)
     val breachInfo = MutableLiveData<List<BreachInfo>>()
 
-
-
     //Injects the info to the form from the database by the ID
-    @SuppressLint("NullSafeMutableLiveData")
     fun injectBreachInfoById(breachInfoId: Int, dataRepository: LoginDataRepository) {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
@@ -35,8 +32,4 @@ class DetailViewModel(app: Application): AndroidViewModel(app) {
             }
         }
     }
-}
-
-private fun <T> MutableLiveData<T>.observe(coroutineScope: CoroutineScope, observer: Observer<T>) {
-
 }

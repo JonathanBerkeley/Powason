@@ -1,4 +1,4 @@
-package com.powapp.powason.ui.login
+package com.powapp.powason.ui.main
 
 import android.util.Log
 import android.view.LayoutInflater

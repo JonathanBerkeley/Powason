@@ -7,28 +7,40 @@
     android:layout_marginStart="10dp"
     android:layout_marginEnd="10dp">
 
-    <pl.droidsonroids.gif.GifImageView
+    <ImageView
         android:id="@+id/breach_company_image"
-        android:layout_width="32dp"
-        android:layout_height="37dp"
-        android:layout_marginStart="1dp"
-        android:layout_marginTop="16dp"
+        android:layout_width="109dp"
+        android:layout_height="98dp"
+        android:layout_marginTop="8dp"
         android:layout_marginBottom="16dp"
         android:contentDescription="@string/website_favicon"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@android:drawable/btn_star" />
+        app:layout_constraintVertical_bias="0.0"
+        tools:srcCompat="@tools:sample/avatars" />
 
     <TextView
         android:id="@+id/breach_info_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        tools:text="TextView"
-        app:layout_constraintBottom_toBottomOf="@+id/breach_company_image"
-        app:layout_constraintStart_toEndOf="@+id/breach_company_image"
-        app:layout_constraintTop_toTopOf="@+id/breach_company_image" />
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="24dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/breach_company_image"
+        tools:text="TextView" />
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
