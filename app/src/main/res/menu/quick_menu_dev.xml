@@ -9,6 +9,13 @@
         android:id="@+id/action_sample_data"
         android:title="@string/add_sample_data" />
     <item
+        android:id="@+id/action_check_emails"
+        android:title="@string/check_for_email_breaches" />
+    <item
+        android:id="@+id/action_check_passwords"
+        android:title="@string/check_for_password_breaches" />
+    <item
         android:id="@+id/action_check_security"
         android:title="@string/check_for_breaches" />
+
 </menu>

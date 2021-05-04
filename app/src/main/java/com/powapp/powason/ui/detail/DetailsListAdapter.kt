@@ -52,7 +52,6 @@ class DetailsListAdapter(
         val breach = breachList[position]
         val noLogo = "https://haveibeenpwned.com/Content/Images/PwnedLogos/List.png"
 
-
         //Unpack compromised data information from list
         var compromisedData: String = ""
         for (data in breach.DataClasses) {

@@ -75,7 +75,6 @@ class DetailFragment : Fragment() {
 
         sharedViewModel.dataRepository.breachInfo.observe(viewLifecycleOwner, Observer {
             requireActivity().title = it.dataEntity?.username
-            Log.i("Testing", "Hello, world!" + it.breachInfoData[0].Description)
             val adapter = DetailsListAdapter(requireContext(), it.breachInfoData)
             recyclerView.adapter = adapter
             recyclerView.layoutManager = LinearLayoutManager(activity)
