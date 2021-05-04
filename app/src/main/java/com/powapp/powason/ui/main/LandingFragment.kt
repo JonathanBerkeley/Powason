@@ -15,7 +15,6 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.powapp.powason.R
-import com.powapp.powason.data.CrackedPasswords
 import com.powapp.powason.databinding.LandingFragmentBinding
 import com.powapp.powason.ui.detail.DetailsListAdapter
 import com.powapp.powason.ui.shared.SharedViewModel
@@ -62,8 +61,7 @@ class LandingFragment : Fragment(),
         viewModel = ViewModelProvider(requireActivity()).get(SharedViewModel::class.java)
         swipeLayout = binding.swipeLayout
         swipeLayout.setOnRefreshListener {
-            viewModel.checkAccountSecurity()
-            checkAccountSecurity()
+            checkEmailSecurity()
         }
 
         with(binding.recyclerView) {
@@ -78,19 +76,27 @@ class LandingFragment : Fragment(),
         //This is very severe so its an alert
         viewModel.crackedPWInfo.observe(viewLifecycleOwner, Observer {
             if (requestComment) {
+                binding.loadingSecurity.visibility = View.VISIBLE //Show loading wheel
                 val checkPresent = it.getCrackedCount()
                 if (checkPresent != "0") {
                     val alertDialogBuilder = AlertDialog.Builder(binding.root.context)
                     alertDialogBuilder.setMessage(
                         "Password for account: \"${it.dataEntity?.title}\" has been found " +
                                 "${checkPresent}times in leaks. " +
-                                "\nIt is unsafe and you should change it immediately!"
+                                "It is unsafe and you should change it anywhere that it has been used immediately!"
                     )
                     alertDialogBuilder.setTitle("SEVERE - PASSWORD LEAK")
                     alertDialogBuilder.setPositiveButton("Ok", null)
                     alertDialogBuilder.show()
                 }
+            }
+            ++commentCounter
+            if (commentCounter == dbCount || commentCounter + 1 == dbCount) {
+                //Reset flag variables
                 requestComment = false
+                commentCounter = 0
+                binding.loadingSecurity.visibility = View.GONE //Hide progress wheel
+                dbCount = null
             }
         })
 
@@ -120,16 +126,17 @@ class LandingFragment : Fragment(),
                     Log.i(HIBP, "No breach found!")
                 }
             }
-            for (breach in it.breach) {
-                Log.i(HIBP, breach.Name)
+            if (DEV_MODE) {
+                for (breach in it.breach) {
+                    Log.i(HIBP, breach.Name)
+                }
+                Log.i(HIBP, "Breaches: " + it.breach.count())
             }
-            Log.i(HIBP, "Breaches: " + it.breach.count())
+
             viewModel.modifyBreachCount(it.dataEntity?.id!!, it.breach.count())
-            loginListAdapter!!.notifyDataSetChanged()
         })
 
         viewModel.loginList?.observe(viewLifecycleOwner, Observer {
-            Log.i("dataLogging!", it.toString())
             loginListAdapter = LoginListAdapter(it, this@LandingFragment)
 
             binding.recyclerView.adapter = loginListAdapter
@@ -142,9 +149,9 @@ class LandingFragment : Fragment(),
         }
 
         if (QUERY_ALL_ON_FOCUS)
-            checkAccountSecurity() // Can easily induce 429 response if unrestricted
+            checkEmailSecurity() // Can easily induce 429 response if unrestricted
         else if (QUERY_ON_FOCUS && loginListAdapter != null)
-            checkAccountSecurity(loginListAdapter!!.itemCount + 1) // Can induce 429 response if unrestricted
+            checkEmailSecurity(loginListAdapter!!.itemCount + 1) // Can induce 429 response if unrestricted
 
         return binding.root
     }
@@ -172,10 +179,11 @@ class LandingFragment : Fragment(),
     private fun addSampleData(): Boolean {
         viewModel.addSampleData()
         Thread.sleep(100) //Tiny delay to prevent race condition
-        checkAccountSecurity()
+        checkEmailSecurity()
         return true
     }
 
+    //Syncs data with webservice (Local API)
     private fun syncDataWithWs(): Boolean {
         //Since this could cause a lot of problems if done accidentally, a confirmation box is added
         val alertDialogBuilder = AlertDialog.Builder(binding.root.context)
@@ -188,7 +196,7 @@ class LandingFragment : Fragment(),
         alertDialogBuilder.show()
 
         Thread.sleep(300) //Tiny delay to prevent race condition
-        checkAccountSecurity()
+        checkEmailSecurity()
         return true
     }
 
@@ -208,37 +216,50 @@ class LandingFragment : Fragment(),
 
     private fun checkEmailSecurity(): Boolean {
         viewModel.checkEmailSecurity()
+        getDBEntryCount()
         swipeLayout.isRefreshing = false
         return true
     }
 
     private fun checkEmailSecurity(accId: Int): Boolean {
         viewModel.checkEmailSecurity(accId)
+        getDBEntryCount()
         swipeLayout.isRefreshing = false
         return true
     }
 
     private fun checkPasswordSecurity(): Boolean {
         requestComment = true //Tells the fragment it's allowed to spawn alerts
+        getDBEntryCount()
         viewModel.checkPasswordSecurity()
         return true
     }
 
     private fun checkPasswordSecurity(accId: Int): Boolean {
+        requestComment = true
+        getDBEntryCount()
         viewModel.checkPasswordSecurity()
         return true
     }
 
     private fun checkAccountSecurity(): Boolean {
+        requestComment = true
+        getDBEntryCount()
         viewModel.checkAccountSecurity()
         swipeLayout.isRefreshing = false
         return true
     }
 
     private fun checkAccountSecurity(accId: Int): Boolean {
+        requestComment = true
+        getDBEntryCount()
         viewModel.checkAccountSecurity(accId)
         swipeLayout.isRefreshing = false
         return true
+    }
+
+    private fun getDBEntryCount() {
+        viewModel.getEntryCount()
     }
 
     //LoginListAdapter interface implementation, handles clicks recycler view clicks

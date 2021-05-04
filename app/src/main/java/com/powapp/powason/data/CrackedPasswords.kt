@@ -1,8 +1,5 @@
 package com.powapp.powason.data
 
-import android.util.Log
-import androidx.core.graphics.createBitmap
-
 class CrackedPasswords (
     var dataEntity: DataEntity?,
     var crackedCollection: String
@@ -15,7 +12,6 @@ class CrackedPasswords (
     //stored password
     fun getCrackedCount(): String {
         val crackedList: List<String> = crackedCollection.split("\n")
-
         for (password in crackedList) {
             val separator: Int = password.indexOf(':')
             if (password.substring(0, separator) ==

@@ -11,9 +11,8 @@ import com.bumptech.glide.request.RequestOptions
 import com.powapp.powason.R
 import com.powapp.powason.data.DataEntity
 import com.powapp.powason.databinding.ListItemBinding
-import com.powapp.powason.util.DBG
 import com.powapp.powason.util.FAVICON_API
-import java.lang.Exception
+import com.powapp.powason.util.requestComment
 
 class LoginListAdapter(
     private val loginList: List<DataEntity>,
@@ -70,7 +69,7 @@ class LoginListAdapter(
 
             //Button listener
             breachViewerBtn.setOnClickListener {
-                Log.i(DBG, "Hello world")
+                requestComment = false //Stops alerts from showing up from previous page
                 listener.onButtonPress(login.id)
             }
 

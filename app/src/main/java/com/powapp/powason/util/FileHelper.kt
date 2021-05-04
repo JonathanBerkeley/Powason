@@ -2,6 +2,8 @@ package com.powapp.powason.util
 
 import android.content.Context
 
+//Unused/legacy file loader
+
 class FileHelper {
     companion object {
 

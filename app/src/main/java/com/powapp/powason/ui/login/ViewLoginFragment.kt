@@ -1,16 +1,16 @@
 package com.powapp.powason.ui.login
 
 import android.app.Activity
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.util.Log
 import android.view.*
-import androidx.fragment.app.Fragment
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
@@ -20,6 +20,7 @@ import com.powapp.powason.databinding.ViewLoginFragmentBinding
 import com.powapp.powason.util.CURSOR_POSITION_KEY
 import com.powapp.powason.util.EDIT_TEXT_KEY
 import com.powapp.powason.util.FAVICON_API
+import com.powapp.powason.util.requestComment
 import java.security.SecureRandom
 import java.util.*
 
@@ -65,6 +66,8 @@ class ViewLoginFragment : Fragment() {
         //Gets the data from the database
         viewModel.injectLoginById(args.loginId)
         viewModel.getLastSavedSite(args.loginId)
+
+        requestComment = false //Prevent alerts from other pages
 
 
         //Sets data to object data passed in from users click

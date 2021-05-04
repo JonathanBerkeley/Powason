@@ -1,6 +1,5 @@
 package com.powapp.powason.util
 
-import java.lang.StringBuilder
 import java.security.MessageDigest
 
 //Modified from code by Sam Clarke
