@@ -7,12 +7,14 @@
       <w>breachedaccount</w>
       <w>emoji</w>
       <w>favicons</w>
+      <w>gson</w>
       <w>hibp</w>
       <w>logins</w>
       <w>mysecretapikey</w>
       <w>noopener</w>
       <w>powa</w>
       <w>powason</w>
+      <w>pwned</w>
       <w>secucheck</w>
     </words>
   </dictionary>

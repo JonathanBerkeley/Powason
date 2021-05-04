@@ -8,14 +8,21 @@ import androidx.annotation.WorkerThread
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.MutableLiveData
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.powapp.powason.util.DBG
-import com.powapp.powason.util.WEB_HIBP_URL
-import com.powapp.powason.util.WEB_SERVICE_URL
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
+import com.google.gson.stream.JsonReader
+import com.powapp.powason.util.*
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import okhttp3.MediaType
+import okhttp3.RequestBody
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.converter.moshi.MoshiConverterFactory
+import retrofit2.converter.scalars.ScalarsConverterFactory
 import java.net.SocketTimeoutException
 
 class LoginDataRepository(val app: Application) {
@@ -23,9 +30,11 @@ class LoginDataRepository(val app: Application) {
     val loginData = MutableLiveData<List<DataEntity>>()
     val breachName = MutableLiveData<AccountData>()
     val breachInfo = MutableLiveData<AccountDataFull>()
+    val crackedPWInfo = MutableLiveData<CrackedPasswords>()
 
     private var badConnectionHIBP: Boolean = false
     private var badConnectionWS: Boolean = false
+    private var badConnectionPwnedPW: Boolean = false
 
     init {
         refreshData()
@@ -85,6 +94,37 @@ class LoginDataRepository(val app: Application) {
         }
     }
 
+    @WorkerThread
+    suspend fun callPasswordApi(account: DataEntity?) {
+        if (networkAvailable()) {
+            badConnectionPwnedPW = try {
+                val gson: Gson = GsonBuilder().setLenient().create()
+                val retrofit = Retrofit.Builder()
+                    .addConverterFactory(ScalarsConverterFactory.create())
+                    .baseUrl(WEB_PWNED_PW_URL)
+                    .build()
+                val service = retrofit.create(PwnedPasswordService::class.java)
+
+                if (account != null) {
+                    account.passwordHash = HashHelper.sha1(account.password ?: "")
+                    Log.i("HEY!", account.passwordHash + " :D")
+
+                    if (account.passwordHash != "") {
+                        val serviceData = service.getPasswordHashes(
+                            hash = account.passwordHash.substring(0, 5)
+                        )
+                        val ac = CrackedPasswords(account, serviceData)
+                        crackedPWInfo.postValue(ac)
+                    }
+                }
+                false
+            } catch (e: SocketTimeoutException) {
+                Log.i(DBG, "Couldn't connect to pwned password service")
+                true
+            }
+        }
+    }
+
     /*
     private fun getLocalLoginData() {
         val parsedText = FileHelper.parseFromRaw(app, "login_data.json")
@@ -103,6 +143,12 @@ class LoginDataRepository(val app: Application) {
         val connectivityManager = app.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val networkInfo = connectivityManager.activeNetworkInfo
         return networkInfo?.isConnectedOrConnecting ?: false
+    }
+
+    fun checkForPasswordLeak(account: DataEntity?) {
+        CoroutineScope(Dispatchers.IO).launch {
+            callPasswordApi(account)
+        }
     }
 
     fun checkForBreaches(account: DataEntity?, type: RequestType) {

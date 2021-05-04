@@ -2,6 +2,7 @@ package com.powapp.powason.data
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.powapp.powason.util.HashHelper
 import com.powapp.powason.util.NEW_ENTRY_ID
 import java.util.*
 
@@ -15,7 +16,8 @@ data class DataEntity(
     var target_name: String,
     var password: String?,
     var username: String?,
-    var breachCount: Int? = 0
+    var breachCount: Int? = 0,
+    var passwordHash: String = HashHelper.sha1(password ?: "")
 ) {
     //Constructors for the login data
     constructor() : this(NEW_ENTRY_ID, Date(), "", "", "", "", "")

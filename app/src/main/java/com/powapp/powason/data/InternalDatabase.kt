@@ -20,7 +20,7 @@ abstract class InternalDatabase : RoomDatabase() {
                     INSTANCE = Room.databaseBuilder(
                         context.applicationContext,
                         InternalDatabase::class.java,
-                        "powason_logins.db"
+                        "powason_logins0.db"
                     ).build()
                 }
             }

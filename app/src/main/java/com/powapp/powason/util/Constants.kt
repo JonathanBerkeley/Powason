@@ -16,7 +16,7 @@ const val HIBP = "HIBP"
 //API base urls
 const val WEB_SERVICE_URL = "http://10.0.2.2:8080/"
 const val WEB_HIBP_URL = "https://haveibeenpwned.com/api/v3/"
-const val WEB_ALT_HIBP_URL = "https://api.pwnedpasswords.com/"
+const val WEB_PWNED_PW_URL = "https://api.pwnedpasswords.com/"
 const val FAVICON_API = "https://www.google.com/s2/favicons?sz=128&domain_url="
 
 //Persistence keys
@@ -24,4 +24,4 @@ const val EDIT_TEXT_KEY = "editTextKey"
 const val CURSOR_POSITION_KEY = "cursorPositionKey"
 
 //Versioning
-const val APP_VERSION = "0.4.2"
+const val APP_VERSION = "0.4.3"

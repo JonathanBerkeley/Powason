@@ -19,7 +19,6 @@ import com.powapp.powason.databinding.LandingFragmentBinding
 import com.powapp.powason.ui.detail.DetailsListAdapter
 import com.powapp.powason.ui.shared.SharedViewModel
 import com.powapp.powason.util.*
-import kotlinx.coroutines.delay
 import java.util.*
 
 class LandingFragment : Fragment(),
@@ -74,6 +73,10 @@ class LandingFragment : Fragment(),
             addItemDecoration(divider)
         }
 
+        viewModel.crackedPWInfo.observe(viewLifecycleOwner, Observer {
+            Log.i("HEY", "Hello, world {${it.getCrackedCount()}}")
+        })
+
         viewModel.loginData.observe(viewLifecycleOwner, Observer {
             if (insertBool) {
                 for (login in it) {
@@ -91,7 +94,7 @@ class LandingFragment : Fragment(),
             swipeLayout.isRefreshing = false
         })
 
-        viewModel.breachData.observe(viewLifecycleOwner, Observer {
+        viewModel.breachName.observe(viewLifecycleOwner, Observer {
             if (DEV_MODE && it.dataEntity?.username != "") {
                 Log.i(HIBP, "Breaches for: " + it.dataEntity?.username)
 
@@ -199,10 +202,12 @@ class LandingFragment : Fragment(),
     }
 
     private fun checkPasswordSecurity(): Boolean {
+        viewModel.checkPasswordSecurity()
         return true
     }
 
     private fun checkPasswordSecurity(accId: Int): Boolean {
+        viewModel.checkPasswordSecurity()
         return true
     }
 

@@ -1,6 +1,6 @@
 package com.powapp.powason.data
 
-data class AccountDataFull(
+data class AccountDataFull (
     var dataEntity: DataEntity?,
     var breachInfoData: List<BreachInfo>
 ) {

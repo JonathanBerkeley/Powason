@@ -25,7 +25,8 @@ class SharedViewModel(app: Application) : AndroidViewModel(app) {
 
     val dataRepository = LoginDataRepository(app)
     val loginData = dataRepository.loginData
-    val breachData = dataRepository.breachName
+    val breachName = dataRepository.breachName
+    val crackedPWInfo = dataRepository.crackedPWInfo
 
     fun addSampleData() {
         //Start a coroutine
@@ -73,6 +74,26 @@ class SharedViewModel(app: Application) : AndroidViewModel(app) {
                 //Delete all entries in the database and reset the primary key
                 database?.loginDao()?.emptyDatabase()
                 database?.loginDao()?.resetDatabasePK()
+            }
+        }
+    }
+
+    fun checkPasswordSecurity() {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                val databaseSize: Int? = database?.loginDao()?.getCount()
+                for (entry in databaseSize!! downTo 0) {
+                    val acc: DataEntity? = database?.loginDao()?.getLoginById(entry)
+                    if (acc != null) {
+                        with(dataRepository) {
+                            checkForPasswordLeak(acc)
+                        }
+                    }
+                    if (OBEY_API_STRICT)
+                        delay(2100) // Delay to keep the API happy
+                    else if (OBEY_API_LIMIT)
+                        delay(1100) // Can still induce 429 response
+                }
             }
         }
     }

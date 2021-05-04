@@ -7,7 +7,12 @@ import java.security.MessageDigest
 //https://www.samclarke.com/kotlin-hash-strings/
 
 object HashHelper {
-    public fun sha1(input: String): String {
+
+    //Converts string into SHA-1 hash
+    fun sha1(input: String): String {
+        if (input == "")
+            return ""
+
         val hex = "0123456789ABCDEF"
         val rawBytes = MessageDigest
             .getInstance("SHA-1")
