@@ -107,8 +107,6 @@ class LoginDataRepository(val app: Application) {
 
                 if (account != null) {
                     account.passwordHash = HashHelper.sha1(account.password ?: "")
-                    Log.i("HEY!", account.passwordHash + " :D")
-
                     if (account.passwordHash != "") {
                         val serviceData = service.getPasswordHashes(
                             hash = account.passwordHash.substring(0, 5)
@@ -186,6 +184,11 @@ class LoginDataRepository(val app: Application) {
             } else if (badConnectionWS) {
                 alertDialogBuilder.setMessage(
                     "Could not connect to web service " +
+                            "- try again later"
+                )
+            } else if (badConnectionPwnedPW) {
+                alertDialogBuilder.setMessage(
+                    "Could not connect to password checking api " +
                             "- try again later"
                 )
             }

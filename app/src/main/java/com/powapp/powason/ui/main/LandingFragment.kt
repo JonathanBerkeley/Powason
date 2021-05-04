@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.powapp.powason.R
+import com.powapp.powason.data.CrackedPasswords
 import com.powapp.powason.databinding.LandingFragmentBinding
 import com.powapp.powason.ui.detail.DetailsListAdapter
 import com.powapp.powason.ui.shared.SharedViewModel
@@ -73,8 +74,24 @@ class LandingFragment : Fragment(),
             addItemDecoration(divider)
         }
 
+        //Alerts the user that their password has been seen cracked somewhere
+        //This is very severe so its an alert
         viewModel.crackedPWInfo.observe(viewLifecycleOwner, Observer {
-            Log.i("HEY", "Hello, world {${it.getCrackedCount()}}")
+            if (requestComment) {
+                val checkPresent = it.getCrackedCount()
+                if (checkPresent != "0") {
+                    val alertDialogBuilder = AlertDialog.Builder(binding.root.context)
+                    alertDialogBuilder.setMessage(
+                        "Password for account: \"${it.dataEntity?.title}\" has been found " +
+                                "${checkPresent}times in leaks. " +
+                                "\nIt is unsafe and you should change it immediately!"
+                    )
+                    alertDialogBuilder.setTitle("SEVERE - PASSWORD LEAK")
+                    alertDialogBuilder.setPositiveButton("Ok", null)
+                    alertDialogBuilder.show()
+                }
+                requestComment = false
+            }
         })
 
         viewModel.loginData.observe(viewLifecycleOwner, Observer {
@@ -107,11 +124,8 @@ class LandingFragment : Fragment(),
                 Log.i(HIBP, breach.Name)
             }
             Log.i(HIBP, "Breaches: " + it.breach.count())
-
             viewModel.modifyBreachCount(it.dataEntity?.id!!, it.breach.count())
-
             loginListAdapter!!.notifyDataSetChanged()
-
         })
 
         viewModel.loginList?.observe(viewLifecycleOwner, Observer {
@@ -131,7 +145,6 @@ class LandingFragment : Fragment(),
             checkAccountSecurity() // Can easily induce 429 response if unrestricted
         else if (QUERY_ON_FOCUS && loginListAdapter != null)
             checkAccountSecurity(loginListAdapter!!.itemCount + 1) // Can induce 429 response if unrestricted
-
 
         return binding.root
     }
@@ -194,14 +207,19 @@ class LandingFragment : Fragment(),
     }
 
     private fun checkEmailSecurity(): Boolean {
+        viewModel.checkEmailSecurity()
+        swipeLayout.isRefreshing = false
         return true
     }
 
     private fun checkEmailSecurity(accId: Int): Boolean {
+        viewModel.checkEmailSecurity(accId)
+        swipeLayout.isRefreshing = false
         return true
     }
 
     private fun checkPasswordSecurity(): Boolean {
+        requestComment = true //Tells the fragment it's allowed to spawn alerts
         viewModel.checkPasswordSecurity()
         return true
     }

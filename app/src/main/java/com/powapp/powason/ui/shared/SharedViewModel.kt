@@ -98,6 +98,37 @@ class SharedViewModel(app: Application) : AndroidViewModel(app) {
         }
     }
 
+    fun checkEmailSecurity() {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                val databaseSize: Int? = database?.loginDao()?.getCount()
+                for (entry in databaseSize!! downTo 0) {
+                    val acc: DataEntity? = database?.loginDao()?.getLoginById(entry)
+                    if (acc != null) {
+                        with(dataRepository) {
+                            checkForBreaches(acc, RequestType.LOW_DATA)
+                        }
+                    }
+                    if (OBEY_API_STRICT)
+                        delay(2100) // Delay to keep the API happy
+                    else if (OBEY_API_LIMIT)
+                        delay(1100) // Can still induce 429 response
+                }
+            }
+        }
+    }
+
+    fun checkEmailSecurity(id: Int) {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                val acc: DataEntity? = database?.loginDao()?.getLoginById(id)
+                with(dataRepository) {
+                    checkForBreaches(acc, RequestType.LOW_DATA)
+                }
+            }
+        }
+    }
+
     fun checkAccountSecurity() {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
