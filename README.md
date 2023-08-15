@@ -1,5 +1,3 @@
-[![forthebadge](https://forthebadge.com/images/badges/works-on-my-machine.svg)](https://forthebadge.com) &nbsp;&nbsp;&nbsp; [![forthebadge](https://forthebadge.com/images/badges/uses-badges.svg)](https://forthebadge.com)
-
 # Powason - app for android
 Creative Computing Year 3 - Mobile Computing    
 
